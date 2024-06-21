@@ -12,7 +12,7 @@ class WelcomeScreen extends StatelessWidget {
         child: Container(
           alignment: Alignment.center,
           child: const Text(
-            'Hello there!\nTime to manage your restaurant',
+            'Hello there!\nTime to manage your restaurant!',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,
