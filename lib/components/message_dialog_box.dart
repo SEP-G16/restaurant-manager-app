@@ -5,8 +5,8 @@ class MessageDialogBox {
   final String message;
   Color borderColor;
   double borderRadius;
-  double height;
-  double width;
+  double? height;
+  double? width;
   double fontSize;
   bool barrierDismissible;
   Color backgroundColor;
@@ -20,7 +20,7 @@ class MessageDialogBox {
     this.backgroundColor = Colors.white,
     this.textColor = Colors.black,
     this.borderRadius = 10.0,
-    this.height = 100.0,
+    this.height,
     this.width = 200.0,
     this.fontSize = 30,
     this.barrierDismissible = true,
@@ -30,19 +30,22 @@ class MessageDialogBox {
     Get.dialog(
         Dialog(
           child: Container(
+            padding: EdgeInsets.all(10.0),
             height: height,
             width: width,
-            alignment: Alignment.center,
+            // alignment: Alignment.center,
             decoration: BoxDecoration(
               color: backgroundColor,
               borderRadius: BorderRadius.circular(borderRadius),
               border: Border.all(color: borderColor),
             ),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                 message,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: fontSize,
                   color: textColor,
