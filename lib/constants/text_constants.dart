@@ -10,7 +10,7 @@ class TextConstants {
     return TextStyle(
         fontSize: fontSize ?? 30.0,
         color: color ?? ColourConstants.chineseBlack,
-        fontWeight: FontWeight.w600,
+        fontWeight: fontWeight ?? FontWeight.w600,
         fontFamily: 'Altone Trial');
   }
 
@@ -18,7 +18,7 @@ class TextConstants {
     return TextStyle(
         fontSize: fontSize ?? 20.0,
         color: color ?? ColourConstants.chineseBlack,
-        fontWeight: FontWeight.w600,
+        fontWeight: fontWeight ?? FontWeight.w600,
         fontFamily: 'Altone Trial'
     );
   }

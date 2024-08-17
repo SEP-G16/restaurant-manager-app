@@ -25,7 +25,7 @@ class DateInputField extends StatelessWidget {
       width: width ?? 300,
       height: height ?? 60,
       decoration: BoxDecoration(
-        color: ColourConstants.ghostWhite,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
