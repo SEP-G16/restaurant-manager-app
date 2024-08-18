@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager/controller_initializer.dart';
+import 'package:restaurant_manager/views/front_desk/reservation_screen.dart';
 import 'package:restaurant_manager/views/welcome_screen.dart';
 
 class LoadingScreen extends StatelessWidget {
@@ -24,7 +25,7 @@ class LoadingScreen extends StatelessWidget {
         future: initControllers(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return WelcomeScreen();
+            return ReservationScreen();
           } else if (snapshot.hasError) {
             return Scaffold(
               body: SafeArea(
