@@ -137,210 +137,210 @@ class ReservationScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               GetBuilder<ReservationScreenDropDownController>(
-                                  init: ReservationScreenDropDownController(),
-                                  builder: (dropDownCont) {
-                                    return Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              '# of Chairs',
-                                              style:
-                                                  TextConstants.subTextStyle(),
+                                init: ReservationScreenDropDownController(),
+                                builder: (dropDownCont) {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            '# of Chairs',
+                                            style: TextConstants.subTextStyle(),
+                                          ),
+                                          SizedBox(
+                                            width: 10.0,
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  spreadRadius: 1,
+                                                  blurRadius: 4,
+                                                  offset: const Offset(0,
+                                                      3), // changes position of shadow
+                                                ),
+                                              ],
                                             ),
-                                            SizedBox(
-                                              width: 10.0,
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.5),
-                                                    spreadRadius: 1,
-                                                    blurRadius: 4,
-                                                    offset: const Offset(0,
-                                                        3), // changes position of shadow
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Obx(
-                                                () => DropdownButton(
-                                                    iconEnabledColor:
-                                                        ColourConstants
-                                                            .chineseBlack,
-                                                    value: dropDownCont
-                                                        .selectedCount,
-                                                    underline: Container(),
-                                                    items: dropDownCont
-                                                        .chairCountList
-                                                        .map<DropdownMenuItem>(
-                                                          (count) =>
-                                                              DropdownMenuItem(
-                                                            value: count,
-                                                            child: Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              width: 60,
-                                                              child: Text(
-                                                                count
-                                                                    .toString(),
-                                                                style: TextConstants
-                                                                    .subTextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                ),
+                                            child: Obx(
+                                              () => DropdownButton(
+                                                  iconEnabledColor:
+                                                      ColourConstants
+                                                          .chineseBlack,
+                                                  value: dropDownCont
+                                                      .selectedCount,
+                                                  underline: Container(),
+                                                  items: dropDownCont
+                                                      .chairCountList
+                                                      .map<DropdownMenuItem>(
+                                                        (count) =>
+                                                            DropdownMenuItem(
+                                                          value: count,
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            width: 60,
+                                                            child: Text(
+                                                              count.toString(),
+                                                              style: TextConstants
+                                                                  .subTextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
                                                               ),
                                                             ),
                                                           ),
-                                                        )
-                                                        .toList(),
-                                                    onChanged: (value) {
-                                                      dropDownCont
-                                                              .selectedCount =
-                                                          value;
-                                                    }),
-                                              ),
+                                                        ),
+                                                      )
+                                                      .toList(),
+                                                  onChanged: (value) {
+                                                    dropDownCont.selectedCount =
+                                                        value;
+                                                  }),
                                             ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Date',
-                                              style:
-                                                  TextConstants.subTextStyle(),
-                                            ),
-                                            SizedBox(
-                                              width: 10.0,
-                                            ),
-                                            GetBuilder<
-                                                ReservationScreenDateController>(
-                                              init:
-                                                  ReservationScreenDateController(),
-                                              builder: (dateCont) {
-                                                return Obx(
-                                                  () => DateInputField(
-                                                    height: 50,
-                                                    width: 200,
-                                                    selectedDate:
-                                                        dateCont.selectedDate,
-                                                    onPressed: () async {
-                                                      DateTime now =
-                                                          DateTime.now();
-                                                      DateTime twoWeekDate =
-                                                          now.add(Duration(
-                                                              days: 14));
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Date',
+                                            style: TextConstants.subTextStyle(),
+                                          ),
+                                          SizedBox(
+                                            width: 10.0,
+                                          ),
+                                          GetBuilder<
+                                              ReservationScreenDateController>(
+                                            init:
+                                                ReservationScreenDateController(),
+                                            builder: (dateCont) {
+                                              return Obx(
+                                                () => DateInputField(
+                                                  height: 50,
+                                                  width: 200,
+                                                  selectedDate:
+                                                      dateCont.selectedDate,
+                                                  onPressed: () async {
+                                                    DateTime now =
+                                                        DateTime.now();
+                                                    DateTime twoWeekDate =
+                                                        now.add(
+                                                            Duration(days: 14));
 
-                                                      DateTime? selectedDate =
-                                                          await showDatePicker(
-                                                              context: context,
-                                                              firstDate:
-                                                                  now.hour >= 22
-                                                                      ? now.add(
-                                                                          Duration(
-                                                                            days:
-                                                                                1,
-                                                                          ),
-                                                                        )
-                                                                      : now,
-                                                              lastDate: now
-                                                                          .hour >=
-                                                                      22
-                                                                  ? twoWeekDate
-                                                                      .add(
-                                                                      Duration(
-                                                                        days: 1,
-                                                                      ),
-                                                                    )
-                                                                  : twoWeekDate);
-                                                      dateCont.selectedDate =
-                                                          selectedDate ?? now;
-                                                    },
-                                                  ),
-                                                );
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Time Slot',
-                                              style:
-                                                  TextConstants.subTextStyle(),
+                                                    DateTime? selectedDate =
+                                                        await showDatePicker(
+                                                            context: context,
+                                                            firstDate:
+                                                                now.hour >= 22
+                                                                    ? now.add(
+                                                                        Duration(
+                                                                          days:
+                                                                              1,
+                                                                        ),
+                                                                      )
+                                                                    : now,
+                                                            lastDate: now
+                                                                        .hour >=
+                                                                    22
+                                                                ? twoWeekDate
+                                                                    .add(
+                                                                    Duration(
+                                                                      days: 1,
+                                                                    ),
+                                                                  )
+                                                                : twoWeekDate);
+                                                    dateCont.selectedDate =
+                                                        selectedDate ?? now;
+                                                  },
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Time Slot',
+                                            style: TextConstants.subTextStyle(),
+                                          ),
+                                          SizedBox(
+                                            width: 10.0,
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  spreadRadius: 1,
+                                                  blurRadius: 4,
+                                                  offset: const Offset(0,
+                                                      3), // changes position of shadow
+                                                ),
+                                              ],
                                             ),
-                                            SizedBox(
-                                              width: 10.0,
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.5),
-                                                    spreadRadius: 1,
-                                                    blurRadius: 4,
-                                                    offset: const Offset(0,
-                                                        3), // changes position of shadow
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Obx(
-                                                () => DropdownButton(
-                                                    iconEnabledColor:
-                                                        ColourConstants
-                                                            .chineseBlack,
-                                                    value: dropDownCont
-                                                        .selectedTimeSlot,
-                                                    underline: Container(),
-                                                    items: dropDownCont
-                                                        .timeSlots
-                                                        .map<DropdownMenuItem>(
-                                                          (timeSlot) =>
-                                                              DropdownMenuItem(
-                                                            value: timeSlot,
-                                                            child: Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              width: 150,
-                                                              child: Text(
-                                                                timeSlot,
-                                                                style: TextConstants
-                                                                    .subTextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                ),
+                                            child: Obx(
+                                              () => DropdownButton(
+                                                  iconEnabledColor:
+                                                      ColourConstants
+                                                          .chineseBlack,
+                                                  value: dropDownCont
+                                                      .selectedTimeSlot,
+                                                  underline: Container(),
+                                                  items: dropDownCont.timeSlots
+                                                      .map<DropdownMenuItem>(
+                                                        (timeSlot) =>
+                                                            DropdownMenuItem(
+                                                          value: timeSlot,
+                                                          child: Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            width: 150,
+                                                            child: Text(
+                                                              timeSlot,
+                                                              style: TextConstants
+                                                                  .subTextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
                                                               ),
                                                             ),
                                                           ),
-                                                        )
-                                                        .toList(),
-                                                    onChanged: (value) {
-                                                      dropDownCont
-                                                              .selectedTimeSlot =
-                                                          value;
-                                                    }),
-                                              ),
+                                                        ),
+                                                      )
+                                                      .toList(),
+                                                  onChanged: (value) {
+                                                    dropDownCont
+                                                            .selectedTimeSlot =
+                                                        value;
+                                                  }),
                                             ),
-                                            // DropdownButton(items: items, onChanged: (value){})
-                                          ],
-                                        ),
-                                      ],
-                                    );
-                                  }),
+                                          ),
+                                          // DropdownButton(items: items, onChanged: (value){})
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 10.0),
+                                child: Text(
+                                  'Select Tables to Reserve',
+                                  style: TextConstants.mainTextStyle(),
+                                ),
+                              ),
                               Expanded(
                                 child: SingleChildScrollView(
                                   child: Column(
@@ -348,11 +348,40 @@ class ReservationScreen extends StatelessWidget {
                                       10,
                                       (_) => Container(
                                         margin: EdgeInsets.symmetric(
-                                          vertical: 10.0,
+                                            vertical: 10.0, horizontal: 5),
+                                        // width: 150,
+                                        // height: 60,
+                                        decoration: BoxDecoration(
+                                          color: ColourConstants.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 1,
+                                              blurRadius: 4,
+                                              offset: const Offset(0,
+                                                  3), // changes position of shadow
+                                            ),
+                                          ],
                                         ),
-                                        color: Colors.amberAccent,
-                                        width: 150,
-                                        height: 60,
+                                        padding: EdgeInsets.all(20.0),
+                                        child: Row(
+                                          children: [
+                                            Column(
+                                              children: [
+                                                Text(
+                                                  'Table - ${'12'}',
+                                                  style: TextConstants
+                                                      .subTextStyle(),
+                                                ), //table id goes here
+                                              ],
+                                            ),
+                                            Spacer(),
+                                            Checkbox(value: false, onChanged: (value){}),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
