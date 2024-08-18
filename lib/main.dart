@@ -27,7 +27,7 @@ class RestaurantManager extends StatelessWidget {
         canvasColor: ColourConstants.white,
         colorScheme: ColorScheme.light(primary: ColourConstants.gamboge),
       ),
-      home: ReservationScreen(),
+      home: LoadingScreen(),
     );
   }
 }

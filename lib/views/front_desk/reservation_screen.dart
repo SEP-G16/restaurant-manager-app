@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager/components/action_button.dart';
 import 'package:restaurant_manager/components/date_input_field.dart';
+import 'package:restaurant_manager/components/table_tile.dart';
 import 'package:restaurant_manager/constants/colour_constants.dart';
+import 'package:restaurant_manager/controller/data/reservation_screen/reservation_screen_data_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/reservation_screen_date_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/reservation_screen_drop_down_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/reservation_screen_tab_controller.dart';
 import '../../constants/text_constants.dart';
+import 'add_reservation_screen.dart';
 
 class ReservationScreen extends StatelessWidget {
   @override
@@ -187,7 +190,10 @@ class ReservationScreen extends StatelessWidget {
                                                                 .center,
                                                             width: 60,
                                                             child: Text(
-                                                              count.toString(),
+                                                              count == -1
+                                                                  ? 'All'
+                                                                  : count
+                                                                      .toString(),
                                                               style: TextConstants
                                                                   .subTextStyle(
                                                                 fontWeight:
@@ -202,6 +208,12 @@ class ReservationScreen extends StatelessWidget {
                                                   onChanged: (value) {
                                                     dropDownCont.selectedCount =
                                                         value;
+
+                                                    //change table data as well
+                                                    ReservationScreenDataController
+                                                        .instance
+                                                        .changeDisplayedTables(
+                                                            value);
                                                   }),
                                             ),
                                           ),
@@ -234,28 +246,26 @@ class ReservationScreen extends StatelessWidget {
                                                         now.add(
                                                             Duration(days: 14));
 
+                                                    if (now.hour >= 20) {
+                                                      now = now.add(
+                                                        Duration(
+                                                          days: 1,
+                                                        ),
+                                                      );
+                                                      twoWeekDate =
+                                                          twoWeekDate.add(
+                                                        Duration(
+                                                          days: 1,
+                                                        ),
+                                                      );
+                                                    }
+
                                                     DateTime? selectedDate =
                                                         await showDatePicker(
-                                                            context: context,
-                                                            firstDate:
-                                                                now.hour >= 22
-                                                                    ? now.add(
-                                                                        Duration(
-                                                                          days:
-                                                                              1,
-                                                                        ),
-                                                                      )
-                                                                    : now,
-                                                            lastDate: now
-                                                                        .hour >=
-                                                                    22
-                                                                ? twoWeekDate
-                                                                    .add(
-                                                                    Duration(
-                                                                      days: 1,
-                                                                    ),
-                                                                  )
-                                                                : twoWeekDate);
+                                                      context: context,
+                                                      firstDate: now,
+                                                      lastDate: twoWeekDate,
+                                                    );
                                                     dateCont.selectedDate =
                                                         selectedDate ?? now;
                                                   },
@@ -342,49 +352,81 @@ class ReservationScreen extends StatelessWidget {
                                 ),
                               ),
                               Expanded(
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: List.generate(
-                                      10,
-                                      (_) => Container(
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 5),
-                                        // width: 150,
-                                        // height: 60,
-                                        decoration: BoxDecoration(
-                                          color: ColourConstants.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.5),
-                                              spreadRadius: 1,
-                                              blurRadius: 4,
-                                              offset: const Offset(0,
-                                                  3), // changes position of shadow
-                                            ),
-                                          ],
-                                        ),
-                                        padding: EdgeInsets.all(20.0),
-                                        child: Row(
+                                child: Obx(
+                                  () => ReservationScreenDataController
+                                          .instance.displayedTables.isNotEmpty
+                                      ? Stack(
                                           children: [
-                                            Column(
-                                              children: [
-                                                Text(
-                                                  'Table - ${'12'}',
-                                                  style: TextConstants
-                                                      .subTextStyle(),
-                                                ), //table id goes here
-                                              ],
+                                            SingleChildScrollView(
+                                              child: Column(
+                                                children:
+                                                    ReservationScreenDataController
+                                                        .instance
+                                                        .displayedTables
+                                                        .map((table) {
+                                                  return TableTile(
+                                                    table: table,
+                                                    //passing controller check value
+                                                    checkValue:
+                                                        ReservationScreenDataController
+                                                            .instance
+                                                            .checkTableSelected(
+                                                                id: table.id),
+
+                                                    //changing state
+                                                    onCheckBoxPressed: (value) {
+                                                      // add table to selected if checked
+                                                      print(value);
+                                                      if (value == true) {
+                                                        ReservationScreenDataController
+                                                            .instance
+                                                            .addOrRemoveSelectedTable(
+                                                                id: table.id);
+                                                      }
+                                                      //otherwise remove
+                                                      else {
+                                                        ReservationScreenDataController
+                                                            .instance
+                                                            .addOrRemoveSelectedTable(
+                                                                id: table.id,
+                                                                remove: true);
+                                                      }
+                                                    },
+                                                  );
+                                                }).toList(),
+                                              ),
                                             ),
-                                            Spacer(),
-                                            Checkbox(value: false, onChanged: (value){}),
+                                            Visibility(
+                                              visible:
+                                                  ReservationScreenDataController
+                                                      .instance
+                                                      .selectedTables
+                                                      .isNotEmpty,
+                                              child: Align(
+                                                  alignment:
+                                                      Alignment.bottomCenter,
+                                                  child: ActionButton(
+                                                    btnText: 'Add Reservation',
+                                                    onTap: () {
+                                                      Get.to(() =>
+                                                          AddReservationScreen());
+                                                    },
+                                                    width: 300,
+                                                  )),
+                                            ),
+                                          ],
+                                        )
+                                      : Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Sorry, There are no tables available',
+                                              style:
+                                                  TextConstants.mainTextStyle(),
+                                            ),
                                           ],
                                         ),
-                                      ),
-                                    ),
-                                  ),
                                 ),
                               )
                             ],
