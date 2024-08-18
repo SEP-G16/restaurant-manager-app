@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class ReservationScreenDropDownController extends GetxController {
-  List<int> _chairCountList = [2, 4, 6, 8, 12];
+  List<int> _chairCountList = [-1, 2, 4, 6, 8, 12];
   List<int> get chairCountList => _chairCountList;
 
   List<String> _timeSlots = [
@@ -15,7 +15,7 @@ class ReservationScreenDropDownController extends GetxController {
   ];
   List<String> get timeSlots => _timeSlots;
 
-  RxInt _selectedCount = 2.obs;
+  RxInt _selectedCount = (-1).obs;
   int get selectedCount => _selectedCount.value;
   set selectedCount(value) => _selectedCount.value = value;
 

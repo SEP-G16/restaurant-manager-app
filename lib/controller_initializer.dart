@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:restaurant_manager/controller/data/reservation_screen/reservation_screen_data_controller.dart';
 import 'package:restaurant_manager/controller/network/web-socket-controller.dart';
 import 'package:restaurant_manager/controller/views/welcome_screen_controller.dart';
 
@@ -12,6 +13,9 @@ class ControllerInitializer{
       await Get.putAsync(() => WebSocketController.create());
 
       Get.put(WelcomeScreenController());
+
+      //Reservations
+      Get.put(ReservationScreenDataController());
       _initialized = true;
     }catch(e){
       print('Error occurred while initialising controllers!');
