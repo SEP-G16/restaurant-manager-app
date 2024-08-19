@@ -12,6 +12,7 @@ class ActionButton extends StatelessWidget {
     this.btnColor,
     this.textColor,
     this.fontSize,
+    this.borderColor,
   });
 
   final String btnText;
@@ -21,17 +22,25 @@ class ActionButton extends StatelessWidget {
   Color? btnColor;
   Color? textColor;
   double? fontSize;
+  Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(10.0), // Adds ripple effect within the border
       child: Container(
         height: height ?? 60,
         width: width ?? 150,
         decoration: BoxDecoration(
           color: btnColor ?? ColourConstants.gamboge,
           borderRadius: BorderRadius.circular(10.0),
+          border: borderColor != null
+              ? Border.all(
+            color: borderColor!,
+            width: 2.0,
+          )
+              : null, // No border if borderColor is null
         ),
         child: Center(
           child: Text(

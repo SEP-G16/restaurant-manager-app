@@ -9,4 +9,6 @@ class ColourConstants{
   static const Color white = Color(0xFFFFFDFD);
   static const Color chineseBlack = Color(0xFF181615);
   static const Color gamboge = Color(0xFFE6A713);
+
+  static const Color blue = Color(0xFF0000FF);
 }
