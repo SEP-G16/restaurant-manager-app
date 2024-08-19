@@ -4,6 +4,7 @@ import 'package:restaurant_manager/constants/colour_constants.dart';
 import 'package:restaurant_manager/views/front_desk/reservation_screen.dart';
 import 'package:restaurant_manager/views/loading_screen.dart';
 import 'package:restaurant_manager/views/login_screen.dart';
+import 'package:restaurant_manager/views/kitchen/view_inventory.dart';
 
 void main() {
   runApp(const RestaurantManager());
@@ -27,7 +28,7 @@ class RestaurantManager extends StatelessWidget {
         canvasColor: ColourConstants.white,
         colorScheme: ColorScheme.light(primary: ColourConstants.gamboge),
       ),
-      home: LoadingScreen(),
+      home: ViewInventoryScreen(),
     );
   }
 }
