@@ -345,7 +345,7 @@ class ReservationScreen extends StatelessWidget {
                                 },
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(vertical: 10.0),
+                                padding: EdgeInsets.symmetric(vertical: 15.0),
                                 child: Text(
                                   'Select Tables to Reserve',
                                   style: TextConstants.mainTextStyle(),
