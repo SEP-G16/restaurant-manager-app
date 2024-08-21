@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class ReservationScreenDropDownController extends GetxController {
+class AddReservationTabViewDropDownController extends GetxController {
   List<int> _chairCountList = [-1, 2, 4, 6, 8, 12];
   List<int> get chairCountList => _chairCountList;
 

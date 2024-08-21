@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
-import 'package:restaurant_manager/model/restaurant_table.dart';
+import 'package:restaurant_manager/controller/data/reservation_screen/add_reservation_tab_view_data_controller.dart';
 
-class ReservationScreenDataController extends GetxController {
-  static final ReservationScreenDataController instance = Get.find();
+import '../../../../model/restaurant_table.dart';
 
-  final RxList<RestaurantTable> _allRestaurantTables = <RestaurantTable>[].obs;
-  List<RestaurantTable> get allRestaurantTables => _allRestaurantTables;
+class AddReservationTabViewController extends GetxController{
+  static final AddReservationTabViewController instance = Get.find();
+
+  late final AddReservationTabViewDataController _rsdc;
 
   final RxList<RestaurantTable> _displayedTables = <RestaurantTable>[].obs;
   List<RestaurantTable> get displayedTables => _displayedTables;
@@ -13,24 +14,18 @@ class ReservationScreenDataController extends GetxController {
   final RxList<RestaurantTable> _selectedTables = <RestaurantTable>[].obs;
   List<RestaurantTable> get selectedTables => _selectedTables;
 
+
   void _initController() {
-    List<RestaurantTable> tableList = [
-      RestaurantTable(id: 1, tableId: 101, chairCount: 4),
-      RestaurantTable(id: 2, tableId: 102, chairCount: 6),
-      RestaurantTable(id: 3, tableId: 103, chairCount: 2),
-      RestaurantTable(id: 4, tableId: 104, chairCount: 8),
-      RestaurantTable(id: 5, tableId: 105, chairCount: 4),
-    ];
-    _allRestaurantTables.value = tableList;
-    _displayedTables.value = tableList;
+    _rsdc = AddReservationTabViewDataController.instance;
+    _displayedTables.value = _rsdc.availableTables;
   }
 
   void changeDisplayedTables(int chairCount) {
     if (chairCount == -1) {
-      _displayedTables.value = _allRestaurantTables;
+      _displayedTables.value = _rsdc.availableTables;
       return;
     }
-    _displayedTables.value = _allRestaurantTables
+    _displayedTables.value = _rsdc.availableTables
         .where((table) => table.chairCount == chairCount)
         .toList();
   }
@@ -40,29 +35,32 @@ class ReservationScreenDataController extends GetxController {
     if (remove) {
       if (_selectedTables.any((table) => table.id == id)) {
         _selectedTables.removeWhere((table) => table.id == id);
-      }else{
+      } else {
         // throw error and handle it in the UI if necessary
       }
     } else {
-      if (_allRestaurantTables.any((table) => table.id == id)) {
-        RestaurantTable table = _allRestaurantTables.where((table) => table.id == id).toList().first;
+      if (_rsdc.availableTables.any((table) => table.id == id)) {
+        RestaurantTable table =
+            _rsdc.availableTables.where((table) => table.id == id).toList().first;
         _selectedTables.add(table);
-      }else{
+      } else {
         // throw error and handle it in the UI if necessary
       }
     }
   }
 
   //id - table's id. Not table number
-  bool checkTableSelected({required int id})
-  {
+  bool checkTableSelected({required int id}) {
     return _selectedTables.any((table) => table.id == id);
   }
 
-  void reInit()
-  {
-    _displayedTables.value = _allRestaurantTables;
+  void reInit() {
+    _displayedTables.value = _rsdc.availableTables;
     _selectedTables.clear();
+  }
+
+  void _onTablesChanged(_){
+    _displayedTables.value = _rsdc.availableTables;
   }
 
   @override
@@ -71,4 +69,12 @@ class ReservationScreenDataController extends GetxController {
     _initController();
     super.onInit();
   }
+
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+    ever(_rsdc.listenableAvailableTables, _onTablesChanged);
+  }
+
 }
