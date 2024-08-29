@@ -10,9 +10,7 @@ class ColourConstants{
   static const Color chineseBlack = Color(0xFF181615);
   static const Color gamboge = Color(0xFFE6A713);
 
-  static const Color green = Color(0xFF00FF00);
-  static const Color red = Color(0xFFFF0000);
-  static const Color green1 = Color(0xFF47891D);
-  static const Color red1 = Color(0xFFFE1C07);
-
+  static const Color blue = Color(0xFF0000FF);
+  static const Color red = Color(0xFFFE1C07);
+  static const Color green = Color(0xFF47891D);
 }

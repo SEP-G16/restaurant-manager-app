@@ -124,7 +124,7 @@ class OrderItemTile extends StatelessWidget {
                 },
                 outlineMode: true,
                 borderWidth: 2,
-                borderColour: ColourConstants.green1,
+                borderColour: ColourConstants.green,
               ),
               SizedBox(
                 height: 15,
@@ -142,7 +142,7 @@ class OrderItemTile extends StatelessWidget {
                 },
                 outlineMode: true,
                 borderWidth: 2,
-                borderColour: ColourConstants.red1,
+                borderColour: ColourConstants.red,
               ),
             ],
           ),

@@ -122,7 +122,7 @@ class ProcessingOrderItemTile extends StatelessWidget {
                 },
                 outlineMode: true,
                 borderWidth: 2,
-                borderColour: ColourConstants.green1,
+                borderColour: ColourConstants.green,
               ),
             ],
           ),
