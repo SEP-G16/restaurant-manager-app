@@ -14,11 +14,11 @@ class ActionButton extends StatelessWidget {
     this.fontSize,
     this.outlineMode = false,
     this.borderColour,
-    this.borderWidth = 0.0,
+    this.borderWidth = 1.0,
     this.fontWeight,
-  }){
-    assert(outlineMode ? borderColour != null && borderWidth !=  0.0 : true, "outlineMode cannot be true without borderColour");
-  }
+    this.outlineModeHoverColour,
+    this.outlineModeTextColour,
+  });
 
   final String btnText;
   final Function() onTap;
@@ -31,24 +31,28 @@ class ActionButton extends StatelessWidget {
   Color? borderColour;
   double borderWidth;
   FontWeight? fontWeight;
+  Color? outlineModeHoverColour;
+  Color? outlineModeTextColour;
 
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: outlineMode ? borderColour! : Colors.transparent, width: borderWidth, strokeAlign: BorderSide.strokeAlignOutside),
+        border: Border.all(color: outlineMode ? borderColour ?? ColourConstants.gamboge : Colors.transparent, width: borderWidth, strokeAlign: BorderSide.strokeAlignOutside),
         borderRadius: BorderRadius.circular(10.0),
       ),
       height: height ?? 60,
       width: width ?? 150,
       child: Material(
-        color: btnColor ?? ColourConstants.gamboge,
+        color:
+        outlineMode ? Colors.transparent :
+        btnColor ?? ColourConstants.gamboge,
         borderRadius: BorderRadius.circular(10.0),
         child: InkWell(
           onTap: onTap,
           overlayColor: WidgetStateProperty.resolveWith(
-            (_) => ColourConstants.chineseBlack.withOpacity(
+                (_) => outlineMode ? outlineModeHoverColour ?? ColourConstants.gamboge.withOpacity(0.1) :ColourConstants.chineseBlack.withOpacity(
               0.1,
             ),
           ),
@@ -58,9 +62,9 @@ class ActionButton extends StatelessWidget {
               btnText,
               textAlign: TextAlign.center,
               style: TextConstants.subTextStyle(
-                color: textColor ?? ColourConstants.chineseBlack,
-                fontSize: fontSize ?? 28,
-                fontWeight: fontWeight,
+                color: outlineMode ? outlineModeTextColour ?? borderColour ?? ColourConstants.gamboge : textColor ?? ColourConstants.chineseBlack,
+                fontSize: fontSize ?? 22,
+                fontWeight: fontWeight ?? FontWeight.w600,
               ),
             ),
           ),

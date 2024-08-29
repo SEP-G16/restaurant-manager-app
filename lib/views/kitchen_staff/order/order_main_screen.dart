@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:restaurant_manager/constants/colour_constants.dart';
-import 'package:restaurant_manager/controller/views/reservation_screen/reservation_screen_tab_controller.dart';
-import 'package:restaurant_manager/views/front_desk/select_tables_tab_view.dart';
-import 'package:restaurant_manager/views/front_desk/view_reservations_tab_view.dart';
-import '../../constants/text_constants.dart';
+import 'package:restaurant_manager/controller/views/orders_screen/orders_screen_tab_controller.dart';
+import 'package:restaurant_manager/views/kitchen_staff/order/pending_orders_tab_view.dart';
+import 'package:restaurant_manager/views/kitchen_staff/order/processing_orders_tab_view.dart';
 
-class ReservationScreen extends StatelessWidget {
+import '../../../constants/colour_constants.dart';
+import '../../../constants/text_constants.dart';
+
+class OrderMainScreen extends StatelessWidget {
+  const OrderMainScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ReservationScreenTabController>(
-      init: ReservationScreenTabController(),
+    return GetBuilder<OrdersScreenTabController>(
+      init: OrdersScreenTabController(),
       builder: (controller) {
         return GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -46,7 +49,7 @@ class ReservationScreen extends StatelessWidget {
                                 Align(
                                   alignment: Alignment.center,
                                   child: Text(
-                                    'Manage Reservations',
+                                    'Manage Orders',
                                     style: TextConstants.mainTextStyle(),
                                   ),
                                 ),
@@ -87,7 +90,7 @@ class ReservationScreen extends StatelessWidget {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          'Tables',
+                                          'Pending',
                                           style: TextConstants.mainTextStyle(
                                             fontSize: 28,
                                           ),
@@ -119,7 +122,7 @@ class ReservationScreen extends StatelessWidget {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          'Reservations',
+                                          'Processing',
                                           style: TextConstants.mainTextStyle(
                                             fontSize: 28,
                                           ),
@@ -135,8 +138,8 @@ class ReservationScreen extends StatelessWidget {
                             child: TabBarView(
                               controller: controller.tabController,
                               children: <Widget>[
-                                SelectTablesTabView(),
-                                ViewReservationsTabView(),
+                                PendingOrdersTabView(),
+                                ProcessingOrdersTabView(),
                               ],
                             ),
                           ),
