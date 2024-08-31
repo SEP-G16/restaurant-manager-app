@@ -4,16 +4,18 @@ import '../constants/colour_constants.dart';
 import '../constants/text_constants.dart';
 
 class CustomDropDownButton extends StatelessWidget {
-  CustomDropDownButton({required this.value, this.itemList, required this.selectOptionValue, required this.onChanged,});
+  CustomDropDownButton({required this.value, this.itemList, required this.selectOptionValue, required this.onChanged, this.width,});
 
   dynamic value;
   dynamic selectOptionValue;
   List<DropdownMenuItem<Object>>? itemList;
   void Function(dynamic value)? onChanged;
+  double? width;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width,
       padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
       decoration: BoxDecoration(
         color: ColourConstants.ghostWhite,

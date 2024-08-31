@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:restaurant_manager/constants/colour_constants.dart';
 import 'package:restaurant_manager/views/kitchen/inventory_management_screen.dart';
 import 'package:restaurant_manager/controller/views/inventory_controller.dart';
+import 'package:restaurant_manager/views/login_screen.dart';
 
 void main() {
   // Initialize GetX controllers
@@ -28,7 +29,7 @@ class RestaurantManager extends StatelessWidget {
         canvasColor: ColourConstants.white,
         colorScheme: ColorScheme.light(primary: ColourConstants.gamboge),
       ),
-      home: InventoryManagementScreen(),
+      home: LoginScreen(),
     );
   }
 }

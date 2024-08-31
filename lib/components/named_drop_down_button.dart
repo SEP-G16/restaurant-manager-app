@@ -23,7 +23,7 @@ class NamedDropDownButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width ?? 300,
+      width: width,
       margin: EdgeInsets.symmetric(vertical: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,6 +40,7 @@ class NamedDropDownButton extends StatelessWidget {
             selectOptionValue: selectOptionValue,
             onChanged: onChanged,
             itemList: itemList,
+            width: width,
           ),
         ],
       ),
