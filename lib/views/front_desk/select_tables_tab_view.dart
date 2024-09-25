@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_manager/components/message_dialog_box.dart';
+import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_screen/add_reservation_screen_state_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
@@ -37,7 +39,7 @@ class SelectTablesTabView extends StatelessWidget {
         //TODO: fix width issue
         children: [
           GetBuilder<AddReservationTabViewDropDownController>(
-            init: AddReservationTabViewDropDownController(),
+            // init: AddReservationTabViewDropDownController(),
             builder: (dropDownCont) {
               return orientation == Orientation.landscape
                   ? Row(
@@ -92,10 +94,10 @@ class SelectTablesTabView extends StatelessWidget {
                                         .toList(),
                                     onChanged: (value) {
                                       dropDownCont.selectedCount = value;
-
-                                      //change table data as well
-                                      AddReservationTabViewController.instance
-                                          .changeDisplayedTables(value);
+                                      //
+                                      // //change table data as well
+                                      // AddReservationTabViewController.instance
+                                      //     .changeDisplayedTables(value);
                                     }),
                               ),
                             ),
@@ -111,7 +113,7 @@ class SelectTablesTabView extends StatelessWidget {
                               width: 10.0,
                             ),
                             GetBuilder<AddReservationTabViewDateController>(
-                              init: AddReservationTabViewDateController(),
+                              // init: AddReservationTabViewDateController(),
                               builder: (dateCont) {
                                 return Obx(
                                   () => DateInputField(
@@ -142,8 +144,23 @@ class SelectTablesTabView extends StatelessWidget {
                                         firstDate: now,
                                         lastDate: twoWeekDate,
                                       );
-                                      dateCont.selectedDate =
-                                          selectedDate ?? now;
+                                      if (selectedDate == null) {
+                                        MessageDialogBox(
+                                          message: 'Please select a date',
+                                          btnOnPressed: () {
+                                            Get.back();
+                                          },
+                                        );
+                                      } else {
+                                        if (selectedDate.day ==
+                                            DateTime.now().day) {
+                                          dateCont.selectedDate =
+                                              DateTime.now();
+                                        } else {
+                                          dateCont.selectedDate = selectedDate;
+
+                                        }
+                                      }
                                     },
                                   ),
                                 );
@@ -263,9 +280,9 @@ class SelectTablesTabView extends StatelessWidget {
                                           dropDownCont.selectedCount = value;
 
                                           //change table data as well
-                                          AddReservationTabViewController
-                                              .instance
-                                              .changeDisplayedTables(value);
+                                          // AddReservationTabViewController
+                                          //     .instance
+                                          //     .changeDisplayedTables(value);
                                         }),
                                   ),
                                 ),
@@ -282,7 +299,7 @@ class SelectTablesTabView extends StatelessWidget {
                                   width: 10.0,
                                 ),
                                 GetBuilder<AddReservationTabViewDateController>(
-                                  init: AddReservationTabViewDateController(),
+                                  // init: AddReservationTabViewDateController(),
                                   builder: (dateCont) {
                                     return Obx(
                                       () => DateInputField(
@@ -313,8 +330,23 @@ class SelectTablesTabView extends StatelessWidget {
                                             firstDate: now,
                                             lastDate: twoWeekDate,
                                           );
-                                          dateCont.selectedDate =
-                                              selectedDate ?? now;
+                                          if (selectedDate == null) {
+                                            MessageDialogBox(
+                                              message: 'Please select a date',
+                                              btnOnPressed: () {
+                                                Get.back();
+                                              },
+                                            );
+                                          } else {
+                                            if (selectedDate.day ==
+                                                DateTime.now().day) {
+                                              dateCont.selectedDate =
+                                                  DateTime.now();
+                                            } else {
+                                              dateCont.selectedDate = selectedDate;
+
+                                            }
+                                          }
                                         },
                                       ),
                                     );
@@ -324,7 +356,9 @@ class SelectTablesTabView extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20.0,),
+                        SizedBox(
+                          height: 20.0,
+                        ),
                         Row(
                           children: [
                             Text(
