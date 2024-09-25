@@ -37,19 +37,50 @@ class AddReservationTabViewDropDownController extends GetxController {
   }
 
   void setSelectedTimeSlotByDateTime({required DateTime dateTime}) {
+    // if (dateTime.hour >= 22 || dateTime.hour < 8) {
+    //   _selectedTimeSlot.value = _timeSlots.first;
+    // } else {
+    //   int nextAvailableHour = ((dateTime.hour + 1) / 2).ceil() * 2;
+    //   if (nextAvailableHour >= 24) {
+    //     nextAvailableHour = nextAvailableHour - 24;
+    //   }
+    //   if (nextAvailableHour >= 22 || dateTime.hour < 8) {
+    //     _selectedTimeSlot.value = _timeSlots.first;
+    //   } else {
+    //     String slot = '${nextAvailableHour.toString().padLeft(2, '0')}:00 - ${(nextAvailableHour + 2).toString().padLeft(2, '0')}:00';
+    //     _selectedTimeSlot.value = _timeSlots.firstWhere((s) => s == slot, orElse: () => _timeSlots.first);
+    //   }
+    // }
+    _selectedTimeSlot.value = _getTimeSlotAsString(dateTime);
+  }
+
+  String _getTimeSlotAsString(DateTime dateTime){
+    String timeSlot;
     if (dateTime.hour >= 22 || dateTime.hour < 8) {
-      _selectedTimeSlot.value = _timeSlots.first;
+      timeSlot = _timeSlots.first;
     } else {
       int nextAvailableHour = ((dateTime.hour + 1) / 2).ceil() * 2;
       if (nextAvailableHour >= 24) {
         nextAvailableHour = nextAvailableHour - 24;
       }
       if (nextAvailableHour >= 22 || dateTime.hour < 8) {
-        _selectedTimeSlot.value = _timeSlots.first;
+        timeSlot = _timeSlots.first;
       } else {
         String slot = '${nextAvailableHour.toString().padLeft(2, '0')}:00 - ${(nextAvailableHour + 2).toString().padLeft(2, '0')}:00';
-        _selectedTimeSlot.value = _timeSlots.firstWhere((s) => s == slot, orElse: () => _timeSlots.first);
+        timeSlot = _timeSlots.firstWhere((s) => s == slot, orElse: () => _timeSlots.first);
       }
     }
+    return timeSlot;
+  }
+
+  Map<String, int> getTimeSlotAsIntegerMap(DateTime dateTime){
+    String timeSlot = _getTimeSlotAsString(dateTime);
+    int start = int.parse(timeSlot.substring(0, 2));
+    int end = int.parse(timeSlot.substring(8,10));
+    Map<String, int> timeSlotMap = {
+      'start': start,
+      'end': end
+    };
+    return timeSlotMap;
   }
 }
