@@ -63,6 +63,29 @@ class AddReservationTabViewController extends GetxController{
     _displayedTables.value = _rsdc.availableTables;
   }
 
+  Future<void> addReservation(
+      String customerFirstName,
+      String? customerLastName,
+      String customerPhoneNo,
+      String? customerEmail,
+      String timeSlot,
+      int peopleCount) async {
+    int timeSlotStart = int.parse(timeSlot.substring(0, 2));
+    int timeSlotEnd = int.parse(timeSlot.substring(8, 10));
+    await _rsdc.addReservation(
+      reservation: Reservation(
+        id: -1,
+        customerName: '$customerFirstName $customerLastName',
+        reservedDate: _dateController.selectedDate,
+        peopleCount: peopleCount,
+        phoneNo: customerPhoneNo,
+        timeSlotStart: timeSlotStart,
+        timeSlotEnd: timeSlotEnd,
+        tableList: _selectedTables,
+      ),
+    );
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit

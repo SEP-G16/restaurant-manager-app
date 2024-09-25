@@ -4,6 +4,8 @@ import 'package:restaurant_manager/controller/data/reservation_screen/view_reser
 import 'package:restaurant_manager/controller/network/reservation_network_controller.dart';
 import 'package:restaurant_manager/controller/network/web-socket-controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
+import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_date_controller.dart';
+import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_drop_down_controller.dart';
 import 'package:restaurant_manager/controller/views/welcome_screen_controller.dart';
 
 class ControllerInitializer{
@@ -20,7 +22,10 @@ class ControllerInitializer{
       //Reservations
       Get.put(ReservationNetworkController());
       await Get.putAsync(() => AddReservationTabViewDataController.create());
+      Get.put(AddReservationTabViewDateController());
+      Get.put(AddReservationTabViewDropDownController());
       Get.put(AddReservationTabViewController());
+
       await Get.putAsync(() => ViewReservationsTabViewDataController.create());
       _initialized = true;
     }catch(e){

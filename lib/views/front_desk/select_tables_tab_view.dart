@@ -439,6 +439,10 @@ class SelectTablesTabView extends StatelessWidget {
                                       milliseconds: 300,
                                     ),
                                   );
+
+                                  final stateCont = AddReservationScreenStateController.instance;
+                                  stateCont.selectedDate = AddReservationTabViewDateController.instance.selectedDate;
+                                  stateCont.timeSlot = AddReservationTabViewDropDownController.instance.selectedTimeSlot;
                                   Get.to(() => AddReservationScreen());
                                 },
                                 width: 300,

@@ -70,4 +70,14 @@ class ReservationNetworkController extends GetxController {
       throw NetworkException(message: e.toString());
     }
   }
+
+  Future<void> addReservation({required Reservation reservation}) async {
+    try {
+      //simulating network delay
+      await Future.delayed(Duration(seconds: 1));
+      ReservationsConstants.reservations.add(reservation);
+    } catch (e) {
+      throw NetworkException(message: e.toString());
+    }
+  }
 }
