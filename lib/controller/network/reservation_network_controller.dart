@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:restaurant_manager/constants/reservations_constants.dart';
 import 'package:restaurant_manager/constants/table_constants.dart';
 import 'package:restaurant_manager/exception/network_exception.dart';
+import 'package:restaurant_manager/model/reservation.dart';
 
 class ReservationNetworkController extends GetxController {
   static final ReservationNetworkController instance = Get.find();
@@ -18,8 +19,8 @@ class ReservationNetworkController extends GetxController {
 
       dataMap = {
         'date': '${date.year}-${date.month}-${date.day}',
-        'time_slot_start': 8,
-        'time_slot_end': 10,
+        'time_slot_start': timeSlotStart,
+        'time_slot_end': timeSlotEnd,
         'available_tables':
             TableConstants.tableList.map((table) => table.toMap()).toList(),
       };
