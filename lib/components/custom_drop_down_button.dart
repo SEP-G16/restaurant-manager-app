@@ -18,7 +18,7 @@ class CustomDropDownButton extends StatelessWidget {
       width: width,
       padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
       decoration: BoxDecoration(
-        color: ColourConstants.ghostWhite,
+        color: ColourConstants.white,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
