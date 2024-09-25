@@ -7,6 +7,7 @@ class Reservation {
   final DateTime reservedDate;
   final int peopleCount;
   final String phoneNo;
+  String? email;
   final int timeSlotStart;
   final int timeSlotEnd;
   final List<RestaurantTable> tableList;
@@ -20,6 +21,7 @@ class Reservation {
     required this.timeSlotStart,
     required this.timeSlotEnd,
     required this.tableList,
+    this.email,
   }) {
     assert(timeSlotEnd > timeSlotStart);
     assert((timeSlotEnd - timeSlotStart) == 2);
@@ -58,5 +60,29 @@ class Reservation {
       'time_slot_end': timeSlotEnd,
       'table_list': tableList.map((table) => table.toMap()).toList(),
     };
+  }
+
+  Reservation copyWith({
+    int? id,
+    String? customerName,
+    DateTime? reservedDate,
+    int? peopleCount,
+    String? phoneNo,
+    String? email,
+    int? timeSlotStart,
+    int? timeSlotEnd,
+    List<RestaurantTable>? tableList,
+  }) {
+    return Reservation(
+      id: id ?? this.id,
+      customerName: customerName ?? this.customerName,
+      reservedDate: reservedDate ?? this.reservedDate,
+      peopleCount: peopleCount ?? this.peopleCount,
+      phoneNo: phoneNo ?? this.phoneNo,
+      email: email ?? this.email,
+      timeSlotStart: timeSlotStart ?? this.timeSlotStart,
+      timeSlotEnd: timeSlotEnd ?? this.timeSlotEnd,
+      tableList: tableList ?? this.tableList,
+    );
   }
 }
