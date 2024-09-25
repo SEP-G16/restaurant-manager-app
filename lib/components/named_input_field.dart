@@ -10,6 +10,8 @@ class NamedInputField extends StatelessWidget {
     this.height,
     this.width,
     this.readOnly = false,
+    this.initialValue,
+    this.keyboardType,
   });
 
   final String titleText;
@@ -19,6 +21,7 @@ class NamedInputField extends StatelessWidget {
   double? width;
   String? initialValue;
   bool readOnly;
+  TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,7 @@ class NamedInputField extends StatelessWidget {
             height: 5.0,
           ),
           InputField(
+            keyboardType: keyboardType,
             labelText: labelText ?? titleText,
             onChanged: onChanged,
             height: height,
