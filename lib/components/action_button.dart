@@ -12,7 +12,14 @@ class ActionButton extends StatelessWidget {
     this.btnColor,
     this.textColor,
     this.fontSize,
-    this.borderColor,
+
+    this.outlineMode = false,
+    this.borderColour,
+    this.borderWidth = 1.0,
+    this.fontWeight,
+    this.outlineModeHoverColour,
+    this.outlineModeTextColour,
+
   });
 
   final String btnText;
@@ -22,32 +29,46 @@ class ActionButton extends StatelessWidget {
   Color? btnColor;
   Color? textColor;
   double? fontSize;
-  Color? borderColor;
+  bool outlineMode;
+  Color? borderColour;
+  double borderWidth;
+  FontWeight? fontWeight;
+  Color? outlineModeHoverColour;
+  Color? outlineModeTextColour;
+
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(10.0), // Adds ripple effect within the border
-      child: Container(
-        height: height ?? 60,
-        width: width ?? 150,
-        decoration: BoxDecoration(
-          color: btnColor ?? ColourConstants.gamboge,
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: outlineMode ? borderColour ?? ColourConstants.gamboge : Colors.transparent, width: borderWidth, strokeAlign: BorderSide.strokeAlignOutside),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      height: height ?? 60,
+      width: width ?? 150,
+      child: Material(
+        color:
+        outlineMode ? Colors.transparent :
+        btnColor ?? ColourConstants.gamboge,
+        borderRadius: BorderRadius.circular(10.0),
+        child: InkWell(
+          onTap: onTap,
+          overlayColor: WidgetStateProperty.resolveWith(
+                (_) => outlineMode ? outlineModeHoverColour ?? ColourConstants.gamboge.withOpacity(0.1) :ColourConstants.chineseBlack.withOpacity(
+              0.1,
+            ),
+          ),
           borderRadius: BorderRadius.circular(10.0),
-          border: borderColor != null
-              ? Border.all(
-            color: borderColor!,
-            width: 2.0,
-          )
-              : null, // No border if borderColor is null
-        ),
-        child: Center(
-          child: Text(
-            btnText,
-            style: TextConstants.subTextStyle(
-              color: textColor ?? ColourConstants.chineseBlack,
-              fontSize: fontSize ?? 28,
+          child: Center(
+            child: Text(
+              btnText,
+              textAlign: TextAlign.center,
+              style: TextConstants.subTextStyle(
+                color: outlineMode ? outlineModeTextColour ?? borderColour ?? ColourConstants.gamboge : textColor ?? ColourConstants.chineseBlack,
+                fontSize: fontSize ?? 22,
+                fontWeight: fontWeight ?? FontWeight.w600,
+              ),
+
             ),
           ),
         ),

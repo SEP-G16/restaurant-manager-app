@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_manager/components/action_button.dart';
 import 'package:restaurant_manager/components/named_input_field.dart';
 import 'package:restaurant_manager/constants/colour_constants.dart';
-import 'package:restaurant_manager/controller/data/reservation_screen/reservation_screen_data_controller.dart';
+import 'package:restaurant_manager/controller/data/reservation_screen/add_reservation_tab_view_data_controller.dart';
+import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
 
 import '../../constants/text_constants.dart';
 
@@ -177,8 +178,8 @@ class AddReservationScreen extends StatelessWidget {
                         onTap: () {
 
                           //TODO: validate form
-                          final reservationDataCont = ReservationScreenDataController.instance;
-                          reservationDataCont.reInit();
+                          final cont = AddReservationTabViewController.instance;
+                          cont.reInit();
                           Get.back();
                         },
                         width: 400,

@@ -49,7 +49,7 @@ class DateInputField extends StatelessWidget {
             onTap: onPressed,
             child: Icon(
               Icons.calendar_month,
-              color: ColourConstants.prussianBlue,
+              color: ColourConstants.chineseBlack,
             ),
           ),
         ],

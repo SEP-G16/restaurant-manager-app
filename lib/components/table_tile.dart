@@ -40,8 +40,8 @@ class TableTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Table - ${table.tableId}',
-                style: TextConstants.subTextStyle(),
+                'Table - ${table.tableNo}',
+                style: TextConstants.mainTextStyle(fontSize: 20),
               ),
               Row(
                 children: [
