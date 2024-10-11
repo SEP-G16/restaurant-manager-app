@@ -12,12 +12,14 @@ class ActionButton extends StatelessWidget {
     this.btnColor,
     this.textColor,
     this.fontSize,
+
     this.outlineMode = false,
     this.borderColour,
     this.borderWidth = 1.0,
     this.fontWeight,
     this.outlineModeHoverColour,
     this.outlineModeTextColour,
+
   });
 
   final String btnText;
@@ -66,6 +68,7 @@ class ActionButton extends StatelessWidget {
                 fontSize: fontSize ?? 22,
                 fontWeight: fontWeight ?? FontWeight.w600,
               ),
+
             ),
           ),
         ),
