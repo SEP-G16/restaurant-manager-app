@@ -18,7 +18,7 @@ class TextConstants {
     return TextStyle(
         fontSize: fontSize ?? 20.0,
         color: color ?? ColourConstants.chineseBlack,
-        fontWeight: fontWeight ?? FontWeight.w600,
+        fontWeight: fontWeight ?? FontWeight.w500,
         fontFamily: 'Altone Trial'
     );
   }

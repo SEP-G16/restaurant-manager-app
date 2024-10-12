@@ -2,143 +2,161 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:restaurant_manager/components/action_button.dart';
+import 'package:restaurant_manager/components/custom_drop_down_button.dart';
+import 'package:restaurant_manager/components/inventory_tile.dart';
 import 'package:restaurant_manager/constants/colour_constants.dart';
 import 'package:restaurant_manager/constants/text_constants.dart';
-
-import '../front_desk/add_reservation_screen.dart';
+import 'package:restaurant_manager/controller/data/inventory_screen/inventory_data_controller.dart';
+import 'package:restaurant_manager/controller/views/view_inventory_screen/inventory_screen_state_controller.dart';
+import 'package:restaurant_manager/controller/views/view_inventory_screen/inventory_screen_state_controller.dart';
+import 'package:restaurant_manager/views/exclude_custom_drawer.dart';
+import 'package:restaurant_manager/views/kitchen/view_inventory.dart';
 
 class InventoryManagementScreen extends StatelessWidget {
+  final InventoryScreenStateController inventoryController =
+      InventoryScreenStateController.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColourConstants.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: ColourConstants.blue),
-          onPressed: () {
-            // handle back navigation
-          },
-        ),
-        title: Text(
-          'Inventory Management',
-          style: TextConstants.mainTextStyle(fontSize: 24),
-        ),
-        centerTitle: true,
-      ),
+      drawer: CustomDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Search Bar
             Container(
-              margin: EdgeInsets.symmetric(vertical: 20.0),
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Row(
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Search Here',
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-                      ),
-                    ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Builder(builder: (context) {
+                      return GestureDetector(
+                        onTap: () {
+                          Scaffold.of(context).openDrawer();
+                        },
+                        child: Icon(
+                          Icons.menu_rounded,
+                          color: ColourConstants.chineseBlack,
+                          size: 30,
+                        ),
+                      );
+                    }),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {
-                      // mention where to go on press action
-                    },
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Manage Inventory',
+                      style: TextConstants.mainTextStyle(),
+                    ),
                   ),
                 ],
               ),
             ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 20.0),
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 1,
+                          blurRadius: 4,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Search Here',
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 10.0),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            // Add search functionality if needed
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 30.0,
+                ),
+                Text(
+                  'Availability',
+                  style: TextConstants.subTextStyle(),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Obx(
+                  () => CustomDropDownButton(
+                    value: inventoryController.selectedDropDownOption,
+                    selectOptionValue: 'All',
+                    selectOptionText: 'All',
+                    onChanged: (value) {
+                      inventoryController.selectedDropDownOption = value;
+                    },
+                    itemList: [
+                      DropdownMenuItem(
+                        child: Text('In Stock'),
+                        value: 'In Stock',
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Out of Stock'),
+                        value: 'Out of Stock',
+                      ),
+                    ],
+                    width: 300,
+                  ),
+                ),
+              ],
+            ),
+            // Button to navigate to ViewInventoryScreen
             // Inventory Items List
             Expanded(
-              child: ListView(
-                children: [
-                  // First Tile
-                  _buildInventoryTile('Chicken Bun'),
-                  SizedBox(height: 10.0),
-                  // Second Tile
-                  _buildInventoryTile('Chicken Dumpling'),
-                ],
+              child: SingleChildScrollView(
+                child: Obx(
+                  () => Column(
+                    children: inventoryController.displayedInventoryList
+                        .map(
+                          (item) => InventoryTile(
+                            item: item,
+                            onMarkAsInStockPressed: () async {
+                              await inventoryController.updateStockStatus(
+                                  itemId: item.id, stockAvailable: true);
+                            },
+                            onMarkAsOutOfStockPressed: () async {
+                              await inventoryController.updateStockStatus(
+                                  itemId: item.id, stockAvailable: false);
+                            },
+                            onErrorCallBack: (error) {
+                              Get.snackbar('Error', error.toString());
+                            },
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildInventoryTile(String itemName) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-      padding: EdgeInsets.all(20.0),
-      decoration: BoxDecoration(
-        color: ColourConstants.white,
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            itemName,
-            style: TextConstants.mainTextStyle(fontSize: 20),
-          ),
-          SizedBox(height: 10.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ActionButton(
-                btnText: 'Mark as Out of Stock',
-                onTap: () {
-                  Get.to(() =>
-                      AddReservationScreen());
-                  // direct this to add reservation page just for testing
-                },
-                btnColor: Colors.white,
-                textColor: Colors.red,
-                borderColor: Colors.red,
-                width: 180,
-                fontSize: 16,
-              ),
-              SizedBox(width: 10.0),
-              ActionButton(
-                btnText: 'Mark as In Stock',
-                onTap: () {
-                  // Handle in stock action
-                },
-                btnColor: Colors.white,
-                textColor: Colors.green,
-                borderColor: Colors.green,
-                width: 180,
-                fontSize: 16,
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

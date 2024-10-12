@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager/controller_initializer.dart';
 import 'package:restaurant_manager/views/front_desk/reservation_screen.dart';
+import 'package:restaurant_manager/views/kitchen_staff/order/order_main_screen.dart';
 import 'package:restaurant_manager/views/welcome_screen.dart';
 
 class LoadingScreen extends StatelessWidget {
@@ -10,7 +11,7 @@ class LoadingScreen extends StatelessWidget {
   Future<String> initControllers() async {
     try {
       if (!ControllerInitializer.initialized) {
-        ControllerInitializer.initAllControllers();
+        await ControllerInitializer.initAllControllers();
       }
       return 'Done';
     } catch (e) {

@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:restaurant_manager/components/action_button.dart';
+import 'package:restaurant_manager/components/loading_dialog.dart';
+import 'package:restaurant_manager/components/message_dialog_box.dart';
 import 'package:restaurant_manager/components/named_input_field.dart';
 import 'package:restaurant_manager/constants/colour_constants.dart';
-import 'package:restaurant_manager/controller/data/reservation_screen/reservation_screen_data_controller.dart';
+import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_screen/add_reservation_screen_state_controller.dart';
+import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
+import 'package:restaurant_manager/model/form_valid_response.dart';
 
 import '../../constants/text_constants.dart';
 
 import 'package:get/get.dart';
 
 class AddReservationScreen extends StatelessWidget {
-  const AddReservationScreen({super.key});
+  AddReservationScreen({super.key});
+
+  final stateCont = AddReservationScreenStateController.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +80,9 @@ class AddReservationScreen extends StatelessWidget {
                                 Expanded(
                                   child: NamedInputField(
                                     titleText: 'First Name',
-                                    onChanged: (value) {},
+                                    onChanged: (value) {
+                                      stateCont.firstName = value;
+                                    },
                                     width: double.maxFinite,
                                   ),
                                 ),
@@ -83,7 +92,9 @@ class AddReservationScreen extends StatelessWidget {
                                 Expanded(
                                   child: NamedInputField(
                                     titleText: 'Last Name',
-                                    onChanged: (value) {},
+                                    onChanged: (value) {
+                                      stateCont.firstName = value;
+                                    },
                                     width: double.maxFinite,
                                   ),
                                 ),
@@ -95,7 +106,10 @@ class AddReservationScreen extends StatelessWidget {
                                 Expanded(
                                   child: NamedInputField(
                                     titleText: 'Phone No.',
-                                    onChanged: (value) {},
+                                    keyboardType: TextInputType.phone,
+                                    onChanged: (value) {
+                                      stateCont.phoneNo = value;
+                                    },
                                     width: double.maxFinite,
                                   ),
                                 ),
@@ -105,7 +119,9 @@ class AddReservationScreen extends StatelessWidget {
                                 Expanded(
                                   child: NamedInputField(
                                     titleText: 'Email',
-                                    onChanged: (value) {},
+                                    onChanged: (value) {
+                                      stateCont.email = value;
+                                    },
                                     width: double.maxFinite,
                                   ),
                                 ),
@@ -137,6 +153,9 @@ class AddReservationScreen extends StatelessWidget {
                                 Expanded(
                                   child: NamedInputField(
                                     titleText: 'Date',
+                                    readOnly: true,
+                                    initialValue: DateFormat('yyyy/MM/dd')
+                                        .format(stateCont.selectedDate),
                                     onChanged: (value) {},
                                     width: double.maxFinite,
                                   ),
@@ -147,6 +166,8 @@ class AddReservationScreen extends StatelessWidget {
                                 Expanded(
                                   child: NamedInputField(
                                     titleText: 'Time',
+                                    readOnly: true,
+                                    initialValue: stateCont.timeSlot,
                                     onChanged: (value) {},
                                     width: double.maxFinite,
                                   ),
@@ -159,7 +180,10 @@ class AddReservationScreen extends StatelessWidget {
                                 Expanded(
                                   child: NamedInputField(
                                     titleText: 'Number of Customers',
-                                    onChanged: (value) {},
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (value) {
+                                      stateCont.peopleCount = int.parse(value!);
+                                    },
                                     width: double.maxFinite,
                                   ),
                                 ),
@@ -174,16 +198,36 @@ class AddReservationScreen extends StatelessWidget {
                       ),
                       ActionButton(
                         btnText: 'Complete Reservation',
-                        onTap: () {
-
+                        onTap: () async {
+                          FormValidResponse response = stateCont.validateForm();
+                          if (!response.formValid) {
+                            MessageDialogBox(
+                                message: response.message!,
+                                btnOnPressed: () {
+                                  Get.back();
+                                });
+                          } else {
+                            LoadingDialog(
+                              callerFunction: () async {
+                                await stateCont.addReservation();
+                              },
+                              onErrorCallBack: (error) {
+                                MessageDialogBox(
+                                    message: error.toString(),
+                                    btnOnPressed: () {
+                                      Get.back();
+                                    });
+                              },
+                            );
+                            Get.back();
+                          }
                           //TODO: validate form
-                          final reservationDataCont = ReservationScreenDataController.instance;
-                          reservationDataCont.reInit();
-                          Get.back();
                         },
                         width: 400,
                       ),
-                      SizedBox(height: 30,),
+                      SizedBox(
+                        height: 30,
+                      ),
                     ],
                   ),
                 ),

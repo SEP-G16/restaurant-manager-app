@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:restaurant_manager/components/action_button.dart';
-import 'package:restaurant_manager/components/date_input_field.dart';
-import 'package:restaurant_manager/components/table_tile.dart';
 import 'package:restaurant_manager/constants/colour_constants.dart';
-import 'package:restaurant_manager/controller/data/reservation_screen/reservation_screen_data_controller.dart';
-import 'package:restaurant_manager/controller/views/reservation_screen/reservation_screen_date_controller.dart';
-import 'package:restaurant_manager/controller/views/reservation_screen/reservation_screen_drop_down_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/reservation_screen_tab_controller.dart';
+import 'package:restaurant_manager/views/exclude_custom_drawer.dart';
+import 'package:restaurant_manager/views/front_desk/select_tables_tab_view.dart';
+import 'package:restaurant_manager/views/front_desk/view_reservations_tab_view.dart';
 import '../../constants/text_constants.dart';
-import 'add_reservation_screen.dart';
 
 class ReservationScreen extends StatelessWidget {
   @override
@@ -17,428 +13,146 @@ class ReservationScreen extends StatelessWidget {
     return GetBuilder<ReservationScreenTabController>(
       init: ReservationScreenTabController(),
       builder: (controller) {
-        return Scaffold(
-          backgroundColor: ColourConstants.white,
-          body: SafeArea(
-            child: Container(
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.menu_rounded,
-                              color: ColourConstants.chineseBlack,
-                              size: 30,
+        return GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: Scaffold(
+            drawer: CustomDrawer(),
+            backgroundColor: ColourConstants.white,
+            body: SafeArea(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await Future.delayed(Duration(seconds: 1));
+                },
+                child: CustomScrollView(
+                  slivers: [
+                    SliverFillRemaining(
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 10.0),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Builder(
+                                    builder: (context) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Scaffold.of(context).openDrawer();
+                                        },
+                                        child: Icon(
+                                          Icons.menu_rounded,
+                                          color: ColourConstants.chineseBlack,
+                                          size: 30,
+                                        ),
+                                      );
+                                    }
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Manage Reservations',
+                                    style: TextConstants.mainTextStyle(),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Manage Reservations',
-                            style: TextConstants.mainTextStyle(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Obx(
-                      () => TabBar(
-                        indicatorColor: Colors.transparent,
-                        dividerColor: Colors.transparent,
-                        controller: controller.tabController,
-                        overlayColor: WidgetStateColor.resolveWith(
-                            (_) => Colors.transparent),
-                        tabs: <Widget>[
-                          Tab(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20.0),
-                              height: 60,
-                              width: double.maxFinite,
-                              decoration: BoxDecoration(
-                                color: controller.selectedIndex == 0
-                                    ? ColourConstants.gamboge
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 1,
-                                    blurRadius: 4,
-                                    offset: const Offset(
-                                        0, 3), // changes position of shadow
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Obx(
+                              () => TabBar(
+                                indicatorColor: Colors.transparent,
+                                dividerColor: Colors.transparent,
+                                controller: controller.tabController,
+                                overlayColor: WidgetStateColor.resolveWith(
+                                    (_) => Colors.transparent),
+                                tabs: <Widget>[
+                                  Tab(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0),
+                                      height: 60,
+                                      width: double.maxFinite,
+                                      decoration: BoxDecoration(
+                                        color: controller.selectedIndex == 0
+                                            ? ColourConstants.gamboge
+                                            : Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 1,
+                                            blurRadius: 4,
+                                            offset: const Offset(0,
+                                                3), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Tables',
+                                          style: TextConstants.mainTextStyle(
+                                            fontSize: 28,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0),
+                                      height: 60,
+                                      width: double.maxFinite,
+                                      decoration: BoxDecoration(
+                                        color: controller.selectedIndex == 1
+                                            ? ColourConstants.gamboge
+                                            : Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 1,
+                                            blurRadius: 4,
+                                            offset: const Offset(0,
+                                                3), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Reservations',
+                                          style: TextConstants.mainTextStyle(
+                                            fontSize: 28,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
-                              child: Center(
-                                child: Text(
-                                  'Tables',
-                                  style: TextConstants.subTextStyle(
-                                    color: ColourConstants.chineseBlack,
-                                    fontSize: 28,
-                                  ),
-                                ),
-                              ),
                             ),
                           ),
-                          Tab(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20.0),
-                              height: 60,
-                              width: double.maxFinite,
-                              decoration: BoxDecoration(
-                                color: controller.selectedIndex == 1
-                                    ? ColourConstants.gamboge
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 1,
-                                    blurRadius: 4,
-                                    offset: const Offset(
-                                        0, 3), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Reservations',
-                                  style: TextConstants.subTextStyle(
-                                    color: ColourConstants.chineseBlack,
-                                    fontSize: 28,
-                                  ),
-                                ),
-                              ),
+                          Expanded(
+                            child: TabBarView(
+                              controller: controller.tabController,
+                              children: <Widget>[
+                                SelectTablesTabView(),
+                                ViewReservationsTabView(),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      controller: controller.tabController,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: 30.0,
-                            vertical: 20.0,
-                          ),
-                          alignment: Alignment.center,
-                          child: Column(
-                            children: [
-                              GetBuilder<ReservationScreenDropDownController>(
-                                init: ReservationScreenDropDownController(),
-                                builder: (dropDownCont) {
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            '# of Chairs',
-                                            style: TextConstants.subTextStyle(),
-                                          ),
-                                          SizedBox(
-                                            width: 10.0,
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.5),
-                                                  spreadRadius: 1,
-                                                  blurRadius: 4,
-                                                  offset: const Offset(0,
-                                                      3), // changes position of shadow
-                                                ),
-                                              ],
-                                            ),
-                                            child: Obx(
-                                              () => DropdownButton(
-                                                  iconEnabledColor:
-                                                      ColourConstants
-                                                          .chineseBlack,
-                                                  value: dropDownCont
-                                                      .selectedCount,
-                                                  underline: Container(),
-                                                  items: dropDownCont
-                                                      .chairCountList
-                                                      .map<DropdownMenuItem>(
-                                                        (count) =>
-                                                            DropdownMenuItem(
-                                                          value: count,
-                                                          child: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            width: 60,
-                                                            child: Text(
-                                                              count == -1
-                                                                  ? 'All'
-                                                                  : count
-                                                                      .toString(),
-                                                              style: TextConstants
-                                                                  .subTextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      )
-                                                      .toList(),
-                                                  onChanged: (value) {
-                                                    dropDownCont.selectedCount =
-                                                        value;
-
-                                                    //change table data as well
-                                                    ReservationScreenDataController
-                                                        .instance
-                                                        .changeDisplayedTables(
-                                                            value);
-                                                  }),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Date',
-                                            style: TextConstants.subTextStyle(),
-                                          ),
-                                          SizedBox(
-                                            width: 10.0,
-                                          ),
-                                          GetBuilder<
-                                              ReservationScreenDateController>(
-                                            init:
-                                                ReservationScreenDateController(),
-                                            builder: (dateCont) {
-                                              return Obx(
-                                                () => DateInputField(
-                                                  height: 50,
-                                                  width: 200,
-                                                  selectedDate:
-                                                      dateCont.selectedDate,
-                                                  onPressed: () async {
-                                                    DateTime now =
-                                                        DateTime.now();
-                                                    DateTime twoWeekDate =
-                                                        now.add(
-                                                            Duration(days: 14));
-
-                                                    if (now.hour >= 20) {
-                                                      now = now.add(
-                                                        Duration(
-                                                          days: 1,
-                                                        ),
-                                                      );
-                                                      twoWeekDate =
-                                                          twoWeekDate.add(
-                                                        Duration(
-                                                          days: 1,
-                                                        ),
-                                                      );
-                                                    }
-
-                                                    DateTime? selectedDate =
-                                                        await showDatePicker(
-                                                      context: context,
-                                                      firstDate: now,
-                                                      lastDate: twoWeekDate,
-                                                    );
-                                                    dateCont.selectedDate =
-                                                        selectedDate ?? now;
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Time Slot',
-                                            style: TextConstants.subTextStyle(),
-                                          ),
-                                          SizedBox(
-                                            width: 10.0,
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.5),
-                                                  spreadRadius: 1,
-                                                  blurRadius: 4,
-                                                  offset: const Offset(0,
-                                                      3), // changes position of shadow
-                                                ),
-                                              ],
-                                            ),
-                                            child: Obx(
-                                              () => DropdownButton(
-                                                  iconEnabledColor:
-                                                      ColourConstants
-                                                          .chineseBlack,
-                                                  value: dropDownCont
-                                                      .selectedTimeSlot,
-                                                  underline: Container(),
-                                                  items: dropDownCont.timeSlots
-                                                      .map<DropdownMenuItem>(
-                                                        (timeSlot) =>
-                                                            DropdownMenuItem(
-                                                          value: timeSlot,
-                                                          child: Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            width: 150,
-                                                            child: Text(
-                                                              timeSlot,
-                                                              style: TextConstants
-                                                                  .subTextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      )
-                                                      .toList(),
-                                                  onChanged: (value) {
-                                                    dropDownCont
-                                                            .selectedTimeSlot =
-                                                        value;
-                                                  }),
-                                            ),
-                                          ),
-                                          // DropdownButton(items: items, onChanged: (value){})
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 15.0),
-                                child: Text(
-                                  'Select Tables to Reserve',
-                                  style: TextConstants.mainTextStyle(),
-                                ),
-                              ),
-                              Expanded(
-                                child: Obx(
-                                  () => ReservationScreenDataController
-                                          .instance.displayedTables.isNotEmpty
-                                      ? Stack(
-                                          children: [
-                                            SingleChildScrollView(
-                                              child: Column(
-                                                children:
-                                                    ReservationScreenDataController
-                                                        .instance
-                                                        .displayedTables
-                                                        .map((table) {
-                                                  return TableTile(
-                                                    table: table,
-                                                    //passing controller check value
-                                                    checkValue:
-                                                        ReservationScreenDataController
-                                                            .instance
-                                                            .checkTableSelected(
-                                                                id: table.id),
-
-                                                    //changing state
-                                                    onCheckBoxPressed: (value) {
-                                                      // add table to selected if checked
-                                                      print(value);
-                                                      if (value == true) {
-                                                        ReservationScreenDataController
-                                                            .instance
-                                                            .addOrRemoveSelectedTable(
-                                                                id: table.id);
-                                                      }
-                                                      //otherwise remove
-                                                      else {
-                                                        ReservationScreenDataController
-                                                            .instance
-                                                            .addOrRemoveSelectedTable(
-                                                                id: table.id,
-                                                                remove: true);
-                                                      }
-                                                    },
-                                                  );
-                                                }).toList(),
-                                              ),
-                                            ),
-                                            Visibility(
-                                              visible:
-                                                  ReservationScreenDataController
-                                                      .instance
-                                                      .selectedTables
-                                                      .isNotEmpty,
-                                              child: Align(
-                                                  alignment:
-                                                      Alignment.bottomCenter,
-                                                  child: ActionButton(
-                                                    btnText: 'Add Reservation',
-                                                    onTap: () {
-                                                      Get.to(() =>
-                                                          AddReservationScreen());
-                                                    },
-                                                    width: 300,
-                                                  )),
-                                            ),
-                                          ],
-                                        )
-                                      : Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              'Sorry, There are no tables available',
-                                              style:
-                                                  TextConstants.mainTextStyle(),
-                                            ),
-                                          ],
-                                        ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Center(
-                          child: Text("It's rainy here"),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

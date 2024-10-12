@@ -22,7 +22,7 @@ class DateInputField extends StatelessWidget {
     return Container(
       alignment: Alignment.centerLeft,
       padding: EdgeInsets.symmetric(horizontal: 20.0),
-      width: width ?? 300,
+      width: width,
       height: height ?? 60,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -49,7 +49,7 @@ class DateInputField extends StatelessWidget {
             onTap: onPressed,
             child: Icon(
               Icons.calendar_month,
-              color: ColourConstants.prussianBlue,
+              color: ColourConstants.chineseBlack,
             ),
           ),
         ],
