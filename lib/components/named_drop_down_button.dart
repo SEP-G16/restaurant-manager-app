@@ -11,6 +11,7 @@ class NamedDropDownButton extends StatelessWidget {
     required this.onChanged,
     this.itemList,
     this.width,
+    this.selectOptionText,
   });
 
   final String titleText;
@@ -19,6 +20,7 @@ class NamedDropDownButton extends StatelessWidget {
   void Function(dynamic value)? onChanged;
   List<DropdownMenuItem<Object>>? itemList;
   double? width;
+  String? selectOptionText;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class NamedDropDownButton extends StatelessWidget {
             onChanged: onChanged,
             itemList: itemList,
             width: width,
+            selectOptionText: selectOptionText,
           ),
         ],
       ),
