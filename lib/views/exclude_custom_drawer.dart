@@ -30,7 +30,7 @@ class CustomDrawer extends StatelessWidget {
               ActionButton(
                 btnText: 'Manage Reservations',
                 onTap: () {
-                  Get.offAll(() => ReservationScreen());
+                  Get.to(() => ReservationScreen());
                 },
                 width: 250,
               ),
@@ -38,7 +38,7 @@ class CustomDrawer extends StatelessWidget {
               ActionButton(
                 btnText: 'Manage Orders',
                 onTap: () {
-                  Get.offAll(() => OrderMainScreen());
+                  Get.to(() => OrderMainScreen());
                 },
                 width: 250,
               ),
@@ -46,7 +46,7 @@ class CustomDrawer extends StatelessWidget {
               ActionButton(
                 btnText: 'Manage Inventory',
                 onTap: () {
-                  Get.offAll(() => InventoryManagementScreen());
+                  Get.to(() => InventoryManagementScreen());
                 },
                 width: 250,
               ),
