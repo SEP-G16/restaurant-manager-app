@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager/controller/views/orders_screen/orders_screen_tab_controller.dart';
+import 'package:restaurant_manager/views/exclude_custom_drawer.dart';
 import 'package:restaurant_manager/views/kitchen_staff/order/pending_orders_tab_view.dart';
 import 'package:restaurant_manager/views/kitchen_staff/order/processing_orders_tab_view.dart';
 
@@ -18,6 +19,7 @@ class OrderMainScreen extends StatelessWidget {
         return GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: Scaffold(
+            drawer: CustomDrawer(),
             backgroundColor: ColourConstants.white,
             body: SafeArea(
               child: RefreshIndicator(
@@ -37,13 +39,19 @@ class OrderMainScreen extends StatelessWidget {
                               children: [
                                 Align(
                                   alignment: Alignment.centerLeft,
-                                  child: GestureDetector(
-                                    onTap: () {},
-                                    child: Icon(
-                                      Icons.menu_rounded,
-                                      color: ColourConstants.chineseBlack,
-                                      size: 30,
-                                    ),
+                                  child: Builder(
+                                      builder: (context) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Scaffold.of(context).openDrawer();
+                                          },
+                                          child: Icon(
+                                            Icons.menu_rounded,
+                                            color: ColourConstants.chineseBlack,
+                                            size: 30,
+                                          ),
+                                        );
+                                      }
                                   ),
                                 ),
                                 Align(

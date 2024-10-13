@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:restaurant_manager/components/action_button.dart';
+import 'package:restaurant_manager/constants/text_constants.dart';
+
+import '../constants/colour_constants.dart';
 
 class MessageDialogBox {
   final String message;
@@ -16,13 +20,13 @@ class MessageDialogBox {
 
   MessageDialogBox({
     required this.message,
-    this.borderColor = Colors.indigoAccent,
+    this.borderColor = ColourConstants.gamboge,
     this.backgroundColor = Colors.white,
     this.textColor = Colors.black,
     this.borderRadius = 10.0,
     this.height,
     this.width = 200.0,
-    this.fontSize = 30,
+    this.fontSize = 24,
     this.barrierDismissible = true,
     required this.btnOnPressed,
     this.btnText = 'OK',
@@ -40,18 +44,22 @@ class MessageDialogBox {
               border: Border.all(color: borderColor),
             ),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                message,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: fontSize,
-                  color: textColor,
-                ),
-              ), TextButton(onPressed: btnOnPressed, child: Text(btnText))]
-            ),
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: TextConstants.subTextStyle(fontSize: fontSize, color: textColor,),
+                  ),
+                  SizedBox(height: 10,),
+                  ActionButton(
+                    btnText: btnText,
+                    onTap: btnOnPressed,
+                    fontSize: 20,
+                    height: 40,
+                  ),
+                ],),
           ),
         ),
         barrierDismissible: barrierDismissible);

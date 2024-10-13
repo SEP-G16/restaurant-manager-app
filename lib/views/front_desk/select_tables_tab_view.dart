@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_manager/components/message_dialog_box.dart';
+import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_screen/add_reservation_screen_state_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
@@ -25,6 +27,8 @@ class SelectTablesTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Orientation orientation = MediaQuery.of(context).orientation;
+
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: 30.0,
@@ -35,168 +39,381 @@ class SelectTablesTabView extends StatelessWidget {
         //TODO: fix width issue
         children: [
           GetBuilder<AddReservationTabViewDropDownController>(
-            init: AddReservationTabViewDropDownController(),
+            // init: AddReservationTabViewDropDownController(),
             builder: (dropDownCont) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        '# of Chairs',
-                        style: TextConstants.mainTextStyle(fontSize: 20),
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
+              return orientation == Orientation.landscape
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '# of Chairs',
+                              style: TextConstants.mainTextStyle(fontSize: 20),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 4,
+                                    offset: const Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Obx(
+                                () => DropdownButton(
+                                    iconEnabledColor:
+                                        ColourConstants.chineseBlack,
+                                    value: dropDownCont.selectedCount,
+                                    underline: Container(),
+                                    items: dropDownCont.chairCountList
+                                        .map<DropdownMenuItem>(
+                                          (count) => DropdownMenuItem(
+                                            value: count,
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 60,
+                                              child: Text(
+                                                count == -1
+                                                    ? 'All'
+                                                    : count.toString(),
+                                                style: TextConstants
+                                                    .subTextStyle(),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: (value) {
+                                      dropDownCont.selectedCount = value;
+                                      //
+                                      // //change table data as well
+                                      // AddReservationTabViewController.instance
+                                      //     .changeDisplayedTables(value);
+                                    }),
+                              ),
                             ),
                           ],
                         ),
-                        child: Obx(
-                          () => DropdownButton(
-                              iconEnabledColor: ColourConstants.chineseBlack,
-                              value: dropDownCont.selectedCount,
-                              underline: Container(),
-                              items: dropDownCont.chairCountList
-                                  .map<DropdownMenuItem>(
-                                    (count) => DropdownMenuItem(
-                                      value: count,
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        width: 60,
-                                        child: Text(
-                                          count == -1
-                                              ? 'All'
-                                              : count.toString(),
-                                          style: TextConstants.subTextStyle(),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (value) {
-                                dropDownCont.selectedCount = value;
+                        Row(
+                          children: [
+                            Text(
+                              'Date',
+                              style: TextConstants.mainTextStyle(fontSize: 20),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            GetBuilder<AddReservationTabViewDateController>(
+                              // init: AddReservationTabViewDateController(),
+                              builder: (dateCont) {
+                                return Obx(
+                                  () => DateInputField(
+                                    height: 50,
+                                    width: 200,
+                                    selectedDate: dateCont.selectedDate,
+                                    onPressed: () async {
+                                      DateTime now = DateTime.now();
+                                      DateTime twoWeekDate =
+                                          now.add(Duration(days: 14));
 
-                                //change table data as well
-                                AddReservationTabViewController.instance
-                                    .changeDisplayedTables(value);
-                              }),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'Date',
-                        style: TextConstants.mainTextStyle(fontSize: 20),
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      GetBuilder<AddReservationTabViewDateController>(
-                        init: AddReservationTabViewDateController(),
-                        builder: (dateCont) {
-                          return Obx(
-                            () => DateInputField(
-                              height: 50,
-                              width: 200,
-                              selectedDate: dateCont.selectedDate,
-                              onPressed: () async {
-                                DateTime now = DateTime.now();
-                                DateTime twoWeekDate =
-                                    now.add(Duration(days: 14));
+                                      if (now.hour >= 20) {
+                                        now = now.add(
+                                          Duration(
+                                            days: 1,
+                                          ),
+                                        );
+                                        twoWeekDate = twoWeekDate.add(
+                                          Duration(
+                                            days: 1,
+                                          ),
+                                        );
+                                      }
 
-                                if (now.hour >= 20) {
-                                  now = now.add(
-                                    Duration(
-                                      days: 1,
-                                    ),
-                                  );
-                                  twoWeekDate = twoWeekDate.add(
-                                    Duration(
-                                      days: 1,
-                                    ),
-                                  );
-                                }
+                                      DateTime? selectedDate =
+                                          await showDatePicker(
+                                        context: context,
+                                        firstDate: now,
+                                        lastDate: twoWeekDate,
+                                      );
+                                      if (selectedDate == null) {
+                                        MessageDialogBox(
+                                          message: 'Please select a date',
+                                          btnOnPressed: () {
+                                            Get.back();
+                                          },
+                                        );
+                                      } else {
+                                        if (selectedDate.day ==
+                                            DateTime.now().day) {
+                                          dateCont.selectedDate =
+                                              DateTime.now();
+                                        } else {
+                                          dateCont.selectedDate = selectedDate;
 
-                                DateTime? selectedDate = await showDatePicker(
-                                  context: context,
-                                  firstDate: now,
-                                  lastDate: twoWeekDate,
+                                        }
+                                      }
+                                    },
+                                  ),
                                 );
-                                dateCont.selectedDate = selectedDate ?? now;
                               },
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              'Time Slot',
+                              style: TextConstants.mainTextStyle(fontSize: 20),
                             ),
-                          );
-                        },
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'Time Slot',
-                        style: TextConstants.mainTextStyle(fontSize: 20),
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 4,
+                                    offset: const Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Obx(
+                                () => DropdownButton(
+                                    iconEnabledColor:
+                                        ColourConstants.chineseBlack,
+                                    value: dropDownCont.selectedTimeSlot,
+                                    underline: Container(),
+                                    items: dropDownCont.timeSlots
+                                        .map<DropdownMenuItem>(
+                                          (timeSlot) => DropdownMenuItem(
+                                            value: timeSlot,
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 150,
+                                              child: Text(
+                                                timeSlot,
+                                                style: TextConstants
+                                                    .subTextStyle(),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: (value) {
+                                      dropDownCont.selectedTimeSlot = value;
+                                    }),
+                              ),
+                            ),
+                            // DropdownButton(items: items, onChanged: (value){})
+                          ],
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  '# of Chairs',
+                                  style:
+                                      TextConstants.mainTextStyle(fontSize: 20),
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 1,
+                                        blurRadius: 4,
+                                        offset: const Offset(
+                                            0, 3), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                  child: Obx(
+                                    () => DropdownButton(
+                                        iconEnabledColor:
+                                            ColourConstants.chineseBlack,
+                                        value: dropDownCont.selectedCount,
+                                        underline: Container(),
+                                        items: dropDownCont.chairCountList
+                                            .map<DropdownMenuItem>(
+                                              (count) => DropdownMenuItem(
+                                                value: count,
+                                                child: Container(
+                                                  alignment: Alignment.center,
+                                                  width: 60,
+                                                  child: Text(
+                                                    count == -1
+                                                        ? 'All'
+                                                        : count.toString(),
+                                                    style: TextConstants
+                                                        .subTextStyle(),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                            .toList(),
+                                        onChanged: (value) {
+                                          dropDownCont.selectedCount = value;
+
+                                          //change table data as well
+                                          // AddReservationTabViewController
+                                          //     .instance
+                                          //     .changeDisplayedTables(value);
+                                        }),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'Date',
+                                  style:
+                                      TextConstants.mainTextStyle(fontSize: 20),
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                GetBuilder<AddReservationTabViewDateController>(
+                                  // init: AddReservationTabViewDateController(),
+                                  builder: (dateCont) {
+                                    return Obx(
+                                      () => DateInputField(
+                                        height: 50,
+                                        width: 200,
+                                        selectedDate: dateCont.selectedDate,
+                                        onPressed: () async {
+                                          DateTime now = DateTime.now();
+                                          DateTime twoWeekDate =
+                                              now.add(Duration(days: 14));
+
+                                          if (now.hour >= 20) {
+                                            now = now.add(
+                                              Duration(
+                                                days: 1,
+                                              ),
+                                            );
+                                            twoWeekDate = twoWeekDate.add(
+                                              Duration(
+                                                days: 1,
+                                              ),
+                                            );
+                                          }
+
+                                          DateTime? selectedDate =
+                                              await showDatePicker(
+                                            context: context,
+                                            firstDate: now,
+                                            lastDate: twoWeekDate,
+                                          );
+                                          if (selectedDate == null) {
+                                            MessageDialogBox(
+                                              message: 'Please select a date',
+                                              btnOnPressed: () {
+                                                Get.back();
+                                              },
+                                            );
+                                          } else {
+                                            if (selectedDate.day ==
+                                                DateTime.now().day) {
+                                              dateCont.selectedDate =
+                                                  DateTime.now();
+                                            } else {
+                                              dateCont.selectedDate = selectedDate;
+
+                                            }
+                                          }
+                                        },
+                                      ),
+                                    );
+                                  },
+                                )
+                              ],
                             ),
                           ],
                         ),
-                        child: Obx(
-                          () => DropdownButton(
-                              iconEnabledColor: ColourConstants.chineseBlack,
-                              value: dropDownCont.selectedTimeSlot,
-                              underline: Container(),
-                              items: dropDownCont.timeSlots
-                                  .map<DropdownMenuItem>(
-                                    (timeSlot) => DropdownMenuItem(
-                                      value: timeSlot,
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        width: 150,
-                                        child: Text(
-                                          timeSlot,
-                                          style: TextConstants.subTextStyle(),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (value) {
-                                dropDownCont.selectedTimeSlot = value;
-                              }),
+                        SizedBox(
+                          height: 20.0,
                         ),
-                      ),
-                      // DropdownButton(items: items, onChanged: (value){})
-                    ],
-                  ),
-                ],
-              );
+                        Row(
+                          children: [
+                            Text(
+                              'Time Slot',
+                              style: TextConstants.mainTextStyle(fontSize: 20),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 4,
+                                    offset: const Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Obx(
+                                () => DropdownButton(
+                                    iconEnabledColor:
+                                        ColourConstants.chineseBlack,
+                                    value: dropDownCont.selectedTimeSlot,
+                                    underline: Container(),
+                                    items: dropDownCont.timeSlots
+                                        .map<DropdownMenuItem>(
+                                          (timeSlot) => DropdownMenuItem(
+                                            value: timeSlot,
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 150,
+                                              child: Text(
+                                                timeSlot,
+                                                style: TextConstants
+                                                    .subTextStyle(),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: (value) {
+                                      dropDownCont.selectedTimeSlot = value;
+                                    }),
+                              ),
+                            ),
+                            // DropdownButton(items: items, onChanged: (value){})
+                          ],
+                        ),
+                      ],
+                    );
             },
           ),
           Padding(
@@ -251,7 +468,15 @@ class SelectTablesTabView extends StatelessWidget {
                               child: ActionButton(
                                 btnText: 'Add Reservation',
                                 onTap: () async {
-                                  await Future.delayed(Duration(milliseconds: 300,),);
+                                  await Future.delayed(
+                                    Duration(
+                                      milliseconds: 300,
+                                    ),
+                                  );
+
+                                  final stateCont = AddReservationScreenStateController.instance;
+                                  stateCont.selectedDate = AddReservationTabViewDateController.instance.selectedDate;
+                                  stateCont.timeSlot = AddReservationTabViewDropDownController.instance.selectedTimeSlot;
                                   Get.to(() => AddReservationScreen());
                                 },
                                 width: 300,

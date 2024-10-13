@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:restaurant_manager/controller/views/orders_screen/order_screen_main_state_controller.dart';
+import 'package:restaurant_manager/enum/order_item_status.dart';
+import 'package:restaurant_manager/model/order_item.dart';
 
 import '../../../components/order_tile.dart';
 import '../../../enum/order_status.dart';
-import '../../../model/order.dart';
-import '../../../model/order_item.dart';
 
 class ProcessingOrdersTabView extends StatelessWidget {
   const ProcessingOrdersTabView({super.key});
@@ -22,25 +24,42 @@ class ProcessingOrdersTabView extends StatelessWidget {
           );
         },
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              OrderTile(
-                order: Order(
-                    id: 12,
-                    tableNo: 102,
-                    orderItems: [
-                      OrderItem(
-                          id: 1,
-                          menuItemName: 'Avocado Toast',
-                          addOns: [],
-                          additionalNotes: 'N/A',
-                          quantity: 5),
-                    ],
-                    totalAmount: 12000,
-                    status: OrderStatus.Processing),
-              ),
-            ],
-          ),
+          child: Obx(() {
+            return Column(
+              children: OrderScreenMainStateController.instance.orderList
+                  .where(
+                    (order) =>
+                        order.status == OrderStatus.Processing &&
+                        order.orderItems.any(
+                          (orderItem) =>
+                              orderItem.status == OrderItemStatus.Processing,
+                        ),
+                  )
+                  .toList()
+                  .map((order) {
+                return OrderTile(
+                  order: order,
+                  orderItems: order.orderItems
+                      .where((orderItem) =>
+                          orderItem.status == OrderItemStatus.Processing)
+                      .toList(),
+                  onProcessingOrderItemCompletedCallBack:
+                      (int orderItemId) async {
+                    await OrderScreenMainStateController.instance
+                        .completeProcessingOrderItem(
+                            orderId: order.id, orderItemId: orderItemId);
+                  },
+                  onProcessingOrderItemCompleteErrorCallBack: (error) {
+                    Get.snackbar(
+                      "Error",
+                      error.toString(),
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                  },
+                );
+              }).toList(),
+            );
+          }),
         ),
       ),
     );

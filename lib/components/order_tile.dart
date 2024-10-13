@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:restaurant_manager/components/processing_order_item_tile.dart';
 import 'package:restaurant_manager/enum/order_status.dart';
@@ -5,13 +7,29 @@ import 'package:restaurant_manager/model/order.dart';
 
 import '../constants/colour_constants.dart';
 import '../constants/text_constants.dart';
+import '../enum/order_item_status.dart';
 import '../model/order_item.dart';
 import 'order_item_tile.dart';
 
 class OrderTile extends StatelessWidget {
-  const OrderTile({required this.order});
+  OrderTile({
+    required this.order,
+    required this.orderItems,
+    this.onOrderItemAcceptCallBack,
+    this.onOrderItemRejectCallBack,
+    this.onOrderItemAcceptErrorCallBack,
+    this.onProcessingOrderItemCompletedCallBack,
+    this.onProcessingOrderItemCompleteErrorCallBack,
+  });
 
   final Order order;
+  final List<OrderItem> orderItems;
+  FutureOr<void> Function(int id)? onOrderItemAcceptCallBack;
+  FutureOr<void> Function(int id)? onOrderItemRejectCallBack;
+  void Function(Object? error)? onOrderItemAcceptErrorCallBack;
+  void Function(Object? error)? onOrderItemRejectErrorCallBack;
+  FutureOr<void> Function(int id)? onProcessingOrderItemCompletedCallBack;
+  void Function(Object? error)? onProcessingOrderItemCompleteErrorCallBack;
 
   @override
   Widget build(BuildContext context) {
@@ -78,19 +96,34 @@ class OrderTile extends StatelessWidget {
             style: TextConstants.mainTextStyle(fontSize: 36),
           ),
           Column(
-            children: order.orderItems
+            children: orderItems
                 .map<Widget>(
-                  (orderItem) => order.status == OrderStatus.Pending
+                  (orderItem) => orderItem.status == OrderItemStatus.Pending
                       ? OrderItemTile(
                           orderItem: orderItem,
-                          onAcceptPressed: () {},
-                          onRejectPressed: () {},
-                          onAcceptErrorCallBack: () {},
-                          onRejectErrorCallBack: (error) {},
+                          onAcceptPressed: () async {
+                            await onOrderItemAcceptCallBack?.call(orderItem.id);
+                          },
+                          onRejectPressed: () async {
+                            await onOrderItemRejectCallBack?.call(orderItem.id);
+                          },
+                          onAcceptErrorCallBack: (error) {
+                            onOrderItemAcceptErrorCallBack?.call(error);
+                          },
+                          onRejectErrorCallBack: (error) {
+                            onOrderItemRejectErrorCallBack?.call(error);
+                          },
                         )
                       : ProcessingOrderItemTile(
                           orderItem: orderItem,
-                          onCompletePressed: () {},
+                          onCompletePressed: () async {
+                            await onProcessingOrderItemCompletedCallBack
+                                ?.call(orderItem.id);
+                          },
+                          onCompleteErrorCallBack: (error) {
+                            onProcessingOrderItemCompleteErrorCallBack
+                                ?.call(error);
+                          },
                         ),
                 )
                 .toList(),

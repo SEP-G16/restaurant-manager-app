@@ -1,7 +1,11 @@
 import 'package:get/get.dart';
 
 class AddReservationTabViewDateController extends GetxController {
+
+  static AddReservationTabViewDateController instance = Get.find();
+
   Rx<DateTime> _selectedDate = DateTime.now().obs;
+  Rx<DateTime> get listenableSelectedDate => _selectedDate;
   DateTime get selectedDate => _selectedDate.value;
   set selectedDate(value) => _selectedDate.value = value;
 

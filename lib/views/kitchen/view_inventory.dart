@@ -6,10 +6,10 @@ import 'package:restaurant_manager/components/table_tile.dart';
 import 'package:restaurant_manager/constants/colour_constants.dart';
 import '../../constants/text_constants.dart';
 import 'package:restaurant_manager/controller/views/view_inventory_screen/view_inventory_screen_tab_controller.dart';
-import 'package:restaurant_manager/controller/views/inventory_controller.dart';
+import 'package:restaurant_manager/controller/data/inventory_screen/inventory_data_controller.dart';
 
 class ViewInventoryScreen extends StatelessWidget {
-  final InventoryController inventoryController = Get.find<InventoryController>();
+  final InventoryDataController inventoryController = Get.find<InventoryDataController>();
   final ViewInventoryScreenTabController tabController = Get.put(ViewInventoryScreenTabController());
 
   @override
@@ -109,7 +109,7 @@ class ViewInventoryScreen extends StatelessWidget {
               child: TabBarView(
                 children: [
                   Obx(() {
-                    var inStockItems = inventoryController.inventory
+                    var inStockItems = inventoryController.inventoryList
                         .where((item) => item.isInStock)
                         .toList();
                     return ListView.builder(
@@ -121,7 +121,7 @@ class ViewInventoryScreen extends StatelessWidget {
                     );
                   }),
                   Obx(() {
-                    var outOfStockItems = inventoryController.inventory
+                    var outOfStockItems = inventoryController.inventoryList
                         .where((item) => !item.isInStock)
                         .toList();
                     return ListView.builder(

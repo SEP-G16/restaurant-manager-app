@@ -16,7 +16,7 @@ class ProcessingOrderItemTile extends StatelessWidget {
 
   final OrderItem orderItem;
   final FutureOr<void> Function() onCompletePressed;
-  void Function()? onCompleteErrorCallBack;
+  void Function(Object? e)? onCompleteErrorCallBack;
 
 
   @override
@@ -116,13 +116,13 @@ class ProcessingOrderItemTile extends StatelessWidget {
                     await onCompletePressed();
                   } catch (e) {
                     if (onCompleteErrorCallBack != null) {
-                      onCompleteErrorCallBack!();
+                      onCompleteErrorCallBack!(e);
                     }
                   }
                 },
                 outlineMode: true,
                 borderWidth: 2,
-                borderColour: ColourConstants.green1,
+                borderColour: ColourConstants.green,
               ),
             ],
           ),
