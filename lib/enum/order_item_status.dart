@@ -1,3 +1,3 @@
 enum OrderItemStatus{
-  Pending, Processing, Ready
+  Pending, Processing, Ready, Rejected
 }

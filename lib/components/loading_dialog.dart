@@ -1,13 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoadingDialog {
-  LoadingDialog({this.callerFunction, this.onErrorCallBack}) {
+  LoadingDialog({
+    this.callerFunction,
+    this.onErrorCallBack,
+  }) {
     _loadingDialog();
   }
 
-  final Future<void> Function()? callerFunction;
-  final void Function(String? error)? onErrorCallBack;
+  final FutureOr<void> Function()? callerFunction;
+  final void Function(Object? error)? onErrorCallBack;
 
   void _loadingDialog() async {
     Get.dialog(
@@ -32,7 +37,7 @@ class LoadingDialog {
       } catch (e) {
         Get.back();
         if (onErrorCallBack != null) {
-          onErrorCallBack!(e.toString());
+          onErrorCallBack!(e);
         }
       }
     } else {

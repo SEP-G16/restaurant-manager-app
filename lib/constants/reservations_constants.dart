@@ -9,7 +9,7 @@ class ReservationsConstants {
     Reservation(
       id: 1,
       customerName: 'John Clark',
-      reservedDate: DateTime(2024, 8, 21),
+      reservedDate: DateTime(2024, 9, 25),
       peopleCount: 8,
       phoneNo: '0771234566',
       timeSlotStart: 12,
@@ -22,7 +22,7 @@ class ReservationsConstants {
     Reservation(
       id: 2,
       customerName: 'Jane Smith',
-      reservedDate: DateTime(2024, 8, 21),
+      reservedDate: DateTime(2024, 9, 25),
       peopleCount: 4,
       phoneNo: '0779876543',
       timeSlotStart: 18,
@@ -34,7 +34,7 @@ class ReservationsConstants {
     Reservation(
       id: 3,
       customerName: 'Alice Brown',
-      reservedDate: DateTime(2024, 8, 23),
+      reservedDate: DateTime(2024, 9, 25),
       peopleCount: 6,
       phoneNo: '0771122334',
       timeSlotStart: 18,
@@ -46,7 +46,7 @@ class ReservationsConstants {
     Reservation(
       id: 4,
       customerName: 'Bob Green',
-      reservedDate: DateTime(2024, 8, 24),
+      reservedDate: DateTime(2024, 9, 26),
       peopleCount: 10,
       phoneNo: '0775566778',
       timeSlotStart: 14,
@@ -59,7 +59,7 @@ class ReservationsConstants {
     Reservation(
       id: 5,
       customerName: 'Charlie White',
-      reservedDate: DateTime(2024, 8, 25),
+      reservedDate: DateTime(2024, 9, 27),
       peopleCount: 2,
       phoneNo: '0773344556',
       timeSlotStart: 16,

@@ -5,6 +5,8 @@ import 'package:restaurant_manager/components/input_field.dart';
 import 'package:restaurant_manager/constants/colour_constants.dart';
 import 'package:restaurant_manager/constants/svg_constants.dart';
 import 'package:restaurant_manager/constants/text_constants.dart';
+import 'package:get/get.dart';
+import 'package:restaurant_manager/views/loading_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -51,7 +53,9 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(
                           height: 20.0,
                         ),
-                        ActionButton(btnText: 'Login', onTap: () {}),
+                        ActionButton(btnText: 'Login', onTap: () {
+                          Get.to(() => LoadingScreen());
+                        }),
                       ],
                     ),
                   );
@@ -84,7 +88,9 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(
                               height: 20.0,
                             ),
-                            ActionButton(btnText: 'Login', onTap: () {}),
+                            ActionButton(btnText: 'Login', onTap: () {
+                              Get.to(() => LoadingScreen());
+                            }),
                           ],
                         ),
                       ],

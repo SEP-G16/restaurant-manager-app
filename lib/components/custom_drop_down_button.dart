@@ -4,19 +4,29 @@ import '../constants/colour_constants.dart';
 import '../constants/text_constants.dart';
 
 class CustomDropDownButton extends StatelessWidget {
-  CustomDropDownButton({required this.value, this.itemList, required this.selectOptionValue, required this.onChanged,});
+  CustomDropDownButton({
+    required this.value,
+    this.itemList,
+    required this.selectOptionValue,
+    required this.onChanged,
+    this.width,
+    this.selectOptionText,
+  });
 
   dynamic value;
   dynamic selectOptionValue;
+  String? selectOptionText;
   List<DropdownMenuItem<Object>>? itemList;
   void Function(dynamic value)? onChanged;
+  double? width;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width,
       padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
       decoration: BoxDecoration(
-        color: ColourConstants.ghostWhite,
+        color: ColourConstants.white,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(
@@ -32,19 +42,19 @@ class CustomDropDownButton extends StatelessWidget {
         underline: Container(),
         value: value,
         items: [
-          DropdownMenuItem(
-            value: selectOptionValue,
-            child: Container(
-              child: Text(
-                'Select',
-                style: TextConstants.subTextStyle(),
+              DropdownMenuItem(
+                value: selectOptionValue,
+                child: Container(
+                  child: Text(
+                    selectOptionText ?? 'Select',
+                    style: TextConstants.subTextStyle(),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ] +
+            ] +
             (itemList ?? []),
         onChanged: onChanged,
-        isExpanded : true,
+        isExpanded: true,
       ),
     );
   }

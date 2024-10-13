@@ -18,7 +18,7 @@ class OrderItemTile extends StatelessWidget {
   final OrderItem orderItem;
   final FutureOr<void> Function() onAcceptPressed;
   final FutureOr<void> Function() onRejectPressed;
-  void Function()? onAcceptErrorCallBack;
+  void Function(Object? e)? onAcceptErrorCallBack;
   void Function(Object? e)? onRejectErrorCallBack;
 
   @override
@@ -118,13 +118,13 @@ class OrderItemTile extends StatelessWidget {
                     await onAcceptPressed();
                   } catch (e) {
                     if (onAcceptErrorCallBack != null) {
-                      onAcceptErrorCallBack!();
+                      onAcceptErrorCallBack!(e);
                     }
                   }
                 },
                 outlineMode: true,
                 borderWidth: 2,
-                borderColour: ColourConstants.green1,
+                borderColour: ColourConstants.green,
               ),
               SizedBox(
                 height: 15,
@@ -142,7 +142,7 @@ class OrderItemTile extends StatelessWidget {
                 },
                 outlineMode: true,
                 borderWidth: 2,
-                borderColour: ColourConstants.red1,
+                borderColour: ColourConstants.red,
               ),
             ],
           ),
