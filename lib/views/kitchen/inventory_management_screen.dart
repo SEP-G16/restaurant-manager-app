@@ -12,6 +12,7 @@ import 'package:restaurant_manager/controller/views/view_inventory_screen/invent
 import 'package:restaurant_manager/views/exclude_custom_drawer.dart';
 import 'package:restaurant_manager/views/kitchen/view_inventory.dart';
 
+
 class InventoryManagementScreen extends StatelessWidget {
   final InventoryScreenStateController inventoryController =
       InventoryScreenStateController.instance;
@@ -156,6 +157,7 @@ class InventoryManagementScreen extends StatelessWidget {
               ),
             ),
           ],
+
         ),
       ),
     );

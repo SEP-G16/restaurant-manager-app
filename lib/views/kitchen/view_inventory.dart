@@ -19,7 +19,7 @@ class ViewInventoryScreen extends StatelessWidget {
         backgroundColor: ColourConstants.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: ColourConstants.blue),
+          icon: Icon(Icons.arrow_back, color: ColourConstants.chineseBlack),
           onPressed: () {
             Get.back();
           },
