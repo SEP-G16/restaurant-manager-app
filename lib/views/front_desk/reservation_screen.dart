@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager/constants/colour_constants.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/reservation_screen_tab_controller.dart';
-import 'package:restaurant_manager/views/exclude_custom_drawer.dart';
+import 'package:restaurant_manager/components/custom_drawer.dart';
 import 'package:restaurant_manager/views/front_desk/select_tables_tab_view.dart';
 import 'package:restaurant_manager/views/front_desk/view_reservations_tab_view.dart';
 import '../../constants/text_constants.dart';
