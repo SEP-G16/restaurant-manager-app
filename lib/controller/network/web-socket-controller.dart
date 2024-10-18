@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:restaurant_manager/controller/data/order_screen/order_data_controller.dart';
 import 'package:restaurant_manager/controller/views/welcome_screen_controller.dart';
 import 'package:socket_io_client/socket_io_client.dart' as SIO;
 import 'package:restaurant_manager/constants/network_constants.dart';
@@ -20,9 +21,10 @@ class WebSocketController extends GetxController {
 
   Future<void> _initController() async {
     try {
-      _socket = SIO.io('${baseUrl}', <String, dynamic>{
+      _socket = SIO.io('${NetworkConstants.websocketUrl}', <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': false,
+        'path': '/ws',
       });
 
       _socket.onConnect((_) {
@@ -30,11 +32,15 @@ class WebSocketController extends GetxController {
       });
       _socket.connect();
 
-      _socket.on('showHelpRequest', (data) {
+      _socket.on('readHelpRequest', (data) {
         print('Executed');
         WelcomeScreenController welcomeScreenController =
             WelcomeScreenController.instance;
         welcomeScreenController.onHelpRequest(data: data);
+      });
+
+      _socket.on('readOrderAdded', (data) {
+        OrderDataController.instance.reInitController();
       });
     } catch (e) {
       print('Error establishing websocket connection.');
