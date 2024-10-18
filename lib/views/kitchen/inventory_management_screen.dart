@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:restaurant_manager/components/action_button.dart';
 import 'package:restaurant_manager/components/custom_drop_down_button.dart';
 import 'package:restaurant_manager/components/inventory_tile.dart';
 import 'package:restaurant_manager/constants/colour_constants.dart';
 import 'package:restaurant_manager/constants/text_constants.dart';
-import 'package:restaurant_manager/controller/data/inventory_screen/inventory_data_controller.dart';
 import 'package:restaurant_manager/controller/views/view_inventory_screen/inventory_screen_state_controller.dart';
-import 'package:restaurant_manager/controller/views/view_inventory_screen/inventory_screen_state_controller.dart';
-import 'package:restaurant_manager/views/exclude_custom_drawer.dart';
-import 'package:restaurant_manager/views/kitchen/view_inventory.dart';
+import 'package:restaurant_manager/enum/menu_item_status.dart';
+import 'package:restaurant_manager/components/custom_drawer.dart';
 
 
 class InventoryManagementScreen extends StatelessWidget {
@@ -140,11 +136,11 @@ class InventoryManagementScreen extends StatelessWidget {
                             item: item,
                             onMarkAsInStockPressed: () async {
                               await inventoryController.updateStockStatus(
-                                  itemId: item.id, stockAvailable: true);
+                                  itemId: item.id, status: MenuItemStatus.InStock);
                             },
                             onMarkAsOutOfStockPressed: () async {
                               await inventoryController.updateStockStatus(
-                                  itemId: item.id, stockAvailable: false);
+                                  itemId: item.id, status: MenuItemStatus.OutOfStock);
                             },
                             onErrorCallBack: (error) {
                               Get.snackbar('Error', error.toString());

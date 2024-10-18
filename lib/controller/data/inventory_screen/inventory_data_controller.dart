@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:restaurant_manager/controller/network/inventory_network_controller.dart';
 
+import '../../../enum/menu_item_status.dart';
 import '../../../model/inventory_item.dart';
 
 class InventoryDataController extends GetxController {
@@ -36,11 +37,11 @@ class InventoryDataController extends GetxController {
     }
   }
 
-  Future<void> updateStockStatus({required int itemId, required bool stockAvailable}) async {
+  Future<void> updateStockStatus({required int itemId, required MenuItemStatus status}) async {
     //network call
     List<InventoryItem> originalItemList = _inventoryList;
     InventoryItem item = originalItemList.firstWhere((item) => item.id == itemId);
-    item.isInStock = stockAvailable;
+    item.status = status;
     _inventoryList = originalItemList;
     listenableInventoryList.assignAll(originalItemList);
   }

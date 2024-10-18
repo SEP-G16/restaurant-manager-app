@@ -1,15 +1,17 @@
+import 'package:restaurant_manager/enum/menu_item_status.dart';
+
 class InventoryItem {
   int _id;
   String _name;
-  bool _isInStock;
-  InventoryItem({required int id, required String name, required bool isInStock}):
+  MenuItemStatus _status;
+  InventoryItem({required int id, required String name, required MenuItemStatus status}):
     _id = id,
     _name = name,
-    _isInStock = isInStock;
+    _status = status;
 
   int get id => _id;
   String get name => _name;
-  bool get isInStock => _isInStock;
+  MenuItemStatus get status => _status;
 
   set id(int id) {
     _id = id;
@@ -19,15 +21,15 @@ class InventoryItem {
     _name = name;
   }
 
-  set isInStock(bool isInStock) {
-    _isInStock = isInStock;
+  set status(MenuItemStatus status) {
+    _status = status;
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': _id,
       'name': _name,
-      'is_in_stock': _isInStock,
+      'status': _status.asString,
     };
   }
 
@@ -35,7 +37,7 @@ class InventoryItem {
     return InventoryItem(
       id: map['id'],
       name: map['name'],
-      isInStock: map['is_in_stock'],
+      status: MenuItemStatus.fromString(map['status']),
     );
   }
 

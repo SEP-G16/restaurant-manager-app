@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:restaurant_manager/controller/data/inventory_screen/inventory_data_controller.dart';
+import 'package:restaurant_manager/enum/menu_item_status.dart';
 import 'package:restaurant_manager/model/inventory_item.dart';
 
 class InventoryScreenStateController extends GetxController {
@@ -21,17 +22,17 @@ class InventoryScreenStateController extends GetxController {
       _displayedInventoryList.assignAll(_invenoryList);
     }
     else if(value == 'In Stock'){
-      _displayedInventoryList.assignAll(_invenoryList.where((item) => item.isInStock).toList());
+      _displayedInventoryList.assignAll(_invenoryList.where((item) => item.status == MenuItemStatus.InStock).toList());
     }
     else if(value == 'Out of Stock'){
-      _displayedInventoryList.assignAll(_invenoryList.where((item) => !item.isInStock).toList());
+      _displayedInventoryList.assignAll(_invenoryList.where((item) => item.status == MenuItemStatus.OutOfStock).toList());
     }
   }
 
   Future<void> updateStockStatus(
-      {required int itemId, required bool stockAvailable}) async {
+      {required int itemId, required MenuItemStatus status}) async {
     await _idc.updateStockStatus(
-        itemId: itemId, stockAvailable: stockAvailable);
+        itemId: itemId, status: status);
   }
 
   @override

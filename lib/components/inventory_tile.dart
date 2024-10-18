@@ -5,6 +5,7 @@ import 'package:restaurant_manager/model/inventory_item.dart';
 
 import '../constants/colour_constants.dart';
 import '../constants/text_constants.dart';
+import '../enum/menu_item_status.dart';
 import 'action_button.dart';
 
 class InventoryTile extends StatelessWidget {
@@ -72,12 +73,12 @@ class InventoryTile extends StatelessWidget {
                 },
                 outlineMode: true,
                 borderWidth: 2.0,
-                borderColour: ColourConstants.red,
+                borderColour: ColourConstants.red1,
                 outlineModeHoverColour: ColourConstants.red.withOpacity(0.1),
                 width: 180,
                 fontSize: 16,
                 height: 40,
-                isDisabled: item.isInStock ? false : true,
+                isDisabled: item.status == MenuItemStatus.OutOfStock,
               ),
               SizedBox(width: 10.0),
               ActionButton(
@@ -96,12 +97,12 @@ class InventoryTile extends StatelessWidget {
                 },
                 outlineMode: true,
                 borderWidth: 2.0,
-                borderColour: ColourConstants.green,
+                borderColour: ColourConstants.green1,
                 outlineModeHoverColour: ColourConstants.green.withOpacity(0.1),
                 width: 180,
                 fontSize: 16,
                 height: 40,
-                isDisabled: item.isInStock ? true : false,
+                isDisabled: item.status == MenuItemStatus.InStock,
               ),
             ],
           ),
