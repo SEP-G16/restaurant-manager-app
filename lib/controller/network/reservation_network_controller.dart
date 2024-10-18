@@ -1,84 +1,125 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:restaurant_manager/constants/reservations_constants.dart';
-import 'package:restaurant_manager/constants/table_constants.dart';
+import 'package:restaurant_manager/controller/data/auth_controller.dart';
 import 'package:restaurant_manager/exception/network_exception.dart';
-import 'package:restaurant_manager/model/reservation.dart';
+import 'package:restaurant_manager/extension/date_time_extension.dart';
+import 'package:http/http.dart' as http;
+
+import '../../constants/network_constants.dart';
+import '../../exception/token_expired_exception.dart';
+import '../../exception/token_not_found_exception.dart';
 
 class ReservationNetworkController extends GetxController {
   static final ReservationNetworkController instance = Get.find();
 
-  Future<Map<String, dynamic>> fetchAvailableTables(
+  final AuthController _authController = AuthController.instance;
+
+  Future<List<Map<String, dynamic>>> fetchAvailableTables(
       {required DateTime date,
       required int timeSlotStart,
       required int timeSlotEnd}) async {
-    try {
-      //simulating network delay
-      await Future.delayed(Duration(seconds: 1));
-      Map<String, dynamic> dataMap = {};
-
-      dataMap = {
-        'date': '${date.year}-${date.month}-${date.day}',
-        'time_slot_start': timeSlotStart,
-        'time_slot_end': timeSlotEnd,
-        'available_tables':
-            TableConstants.tableList.map((table) => table.toMap()).toList(),
-      };
-      return dataMap;
-    } catch (e) {
-      throw NetworkException(message: e.toString());
+    if (_authController.token == null) {
+      throw TokenNotFoundException('Token not found');
     }
-  }
 
-  Future<Map<String, dynamic>> fetchReservationsByDate(
-      DateTime selectedDate) async {
-    ///Expected JSON format
-    /*
-    //   date : 2024-8-21,
-    //   reservations : [
-    //     {
-    //       id : 1,
-    //       customer_name : ,
-    //       //for reserved date, we can get the date field from above
-    //       people_count :
-    //       phone_no :
-    //       time_slot_start :
-    //       time_slot_end :
-    //       table_list : [{id : , table_no : , chair_count : }]
-    //     },
-    //   ]
-    //    */
     try {
-      //simulating network delay
-      await Future.delayed(Duration(seconds: 1));
-      Map<String, dynamic> dataMap = {};
+      var response = await http.post(
+        Uri.parse('${NetworkConstants.baseUrl}/api/table/available'),
+        headers: {
+          'Authorization': 'Bearer ${_authController.token!}',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'selectedDate': date.toIsoFormattedDateTime(),
+          'timeSlotStart': timeSlotStart,
+          'timeSlotEnd': timeSlotEnd
+        }),
+      );
 
-      //adding dummy data
-      dataMap['date'] =
-          '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}';
-      dataMap['reservations'] = ReservationsConstants.reservations
-          .where((reservation) =>
-              reservation.reservedDate ==
-              DateTime.parse(DateFormat('yyyy-MM-dd').format(selectedDate)))
-          .toList()
-          .map((reservation) => reservation.toMap())
-          .toList();
-      return dataMap;
+      if (response.statusCode == 401) {
+        await _authController.logout();
+        throw TokenExpiredException('Token expired');
+      }
+
+      if (response.statusCode != 200) {
+        print(response.body);
+        throw NetworkException('Failed to fetch available tables');
+      }
+      List<dynamic> decoded = jsonDecode(response.body);
+      return decoded.map<Map<String, dynamic>>((element) {
+        Map<String, dynamic> map = element as Map<String, dynamic>;
+        return map;
+      }).toList();
     } on FormatException catch (e) {
-      print('Format Exception Occurs');
+      print(e);
       rethrow;
-    } catch (e) {
-      throw NetworkException(message: e.toString());
     }
   }
 
-  Future<void> addReservation({required Reservation reservation}) async {
+  Future<List<Map<String, dynamic>>> fetchReservationsByDate(
+      DateTime selectedDate) async {
+    if (_authController.token == null) {
+      throw TokenNotFoundException('Token not found');
+    }
+
     try {
-      //simulating network delay
-      await Future.delayed(Duration(seconds: 1));
-      ReservationsConstants.reservations.add(reservation);
-    } catch (e) {
-      throw NetworkException(message: e.toString());
+      var response = await http.get(
+        Uri.parse('${NetworkConstants.baseUrl}/api/table/reservation/by-date?date=${selectedDate.toIsoFormattedDateTime()}'),
+        headers: {
+          'Authorization': 'Bearer ${_authController.token!}',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 401) {
+        await _authController.logout();
+        throw TokenExpiredException('Token expired');
+      }
+
+      if (response.statusCode != 200) {
+        print(response.body);
+        throw NetworkException('Failed to fetch reservations by date');
+      }
+      List<dynamic> decoded = jsonDecode(response.body);
+      return decoded.map<Map<String, dynamic>>((element) {
+        Map<String, dynamic> map = element as Map<String, dynamic>;
+        return map;
+      }).toList();
+    } on FormatException catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  Future<void> addReservation({required Map<String, dynamic> reservationMap}) async {
+    print(reservationMap);
+    if (_authController.token == null) {
+      throw TokenNotFoundException('Token not found');
+    }
+
+    try {
+      var response = await http.post(
+        Uri.parse('${NetworkConstants.baseUrl}/api/table/reservation/add'),
+        headers: {
+          'Authorization': 'Bearer ${_authController.token!}',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(reservationMap),
+      );
+
+      if (response.statusCode == 401) {
+        await _authController.logout();
+        throw TokenExpiredException('Token expired');
+      }
+
+      if (response.statusCode != 201) {
+        print(response.body);
+        throw NetworkException('Failed to create reservation');
+      }
+    } on FormatException catch (e) {
+      print(e);
+      rethrow;
     }
   }
 }
