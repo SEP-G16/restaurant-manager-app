@@ -2,8 +2,10 @@ import 'package:get/get.dart';
 import 'package:restaurant_manager/controller/data/order_screen/order_data_controller.dart';
 import 'package:restaurant_manager/controller/data/reservation_screen/add_reservation_tab_view_data_controller.dart';
 import 'package:restaurant_manager/controller/data/reservation_screen/view_reservations_tab_view_data_controller.dart';
+import 'package:restaurant_manager/controller/data/table/table_data_controller.dart';
 import 'package:restaurant_manager/controller/network/inventory_network_controller.dart';
 import 'package:restaurant_manager/controller/network/reservation_network_controller.dart';
+import 'package:restaurant_manager/controller/network/table_data_network_controller.dart';
 import 'package:restaurant_manager/controller/network/web-socket-controller.dart';
 import 'package:restaurant_manager/controller/views/orders_screen/order_screen_main_state_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
@@ -40,9 +42,14 @@ class ControllerInitializer{
       Get.put(InventoryNetworkController());
       await Get.putAsync(() => InventoryDataController.create());
       Get.put(InventoryScreenStateController());
-      _initialized = true;
+
+      Get.put(TableDataNetworkController());
+      await Get.putAsync(() => TableDataController.create());
+
+
+      // _initialized = true;
     }catch(e){
-      print('Error occurred while initialising controllers! : $e');
+      print('########################-------------------------Error occurred while initialising controllers! : $e -------------------------########################');
       _initialized = false;
       rethrow;
     }
