@@ -18,12 +18,16 @@ class AddReservationTabViewDataController extends GetxController with Reservatio
   static Future<AddReservationTabViewDataController> create() async {
     final AddReservationTabViewDataController controller =
         AddReservationTabViewDataController._();
-    await controller._fetchAvailableTables(
-        date: DateTime.now(), timeSlotStart: 14, timeSlotEnd: 16);
+
+    Map<String, int> timeSlots = controller.getTimeSlotAsIntegerMap(DateTime.now());
+    await controller.fetchAvailableTables(
+        date: DateTime.now(),
+        timeSlotStart: timeSlots['start']!,
+        timeSlotEnd: timeSlots['end']!);
     return controller;
   }
 
-  final RxList<RestaurantTable> _availableTables = <RestaurantTable>[].obs;
+  List<RestaurantTable> _availableTables = <RestaurantTable>[];
   List<RestaurantTable> get availableTables => _availableTables;
   final RxList<RestaurantTable> listenableAvailableTables =
       <RestaurantTable>[].obs;
@@ -35,32 +39,24 @@ class AddReservationTabViewDataController extends GetxController with Reservatio
   }) async {
     List<RestaurantTable> dataList = [];
     try {
-      Map<String, dynamic> dataMap = await _rnc.fetchAvailableTables(
+      List<Map<String, dynamic>> tableMapList = await _rnc.fetchAvailableTables(
         date: date,
         timeSlotStart: timeSlotStart,
         timeSlotEnd: timeSlotEnd,
       );
 
       try {
-        if (dataMap['available_tables'] == null) {
-          throw NullMapKeyException(message: 'NULL Key \'available_tables\'');
-        }
-        _availableTables.value = dataMap['available_tables']!
+        _availableTables = tableMapList
             .map<RestaurantTable>(
                 (tableMap) => RestaurantTable.fromMap(tableMap))
             .toList();
-
-        listenableAvailableTables.value = dataMap['available_tables']!
-            .map<RestaurantTable>(
-                (tableMap) => RestaurantTable.fromMap(tableMap))
-            .toList();
+        listenableAvailableTables.assignAll(_availableTables);
       } on NullMapKeyException catch (e) {
-        //TODO:handle null key
+
         print(e.toString());
         rethrow;
       }
     } on NetworkException catch (e) {
-      //TODO:handle network error
       print(e.toString());
       rethrow;
     }
