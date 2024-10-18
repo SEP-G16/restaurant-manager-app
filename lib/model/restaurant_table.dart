@@ -12,8 +12,8 @@ class RestaurantTable {
   factory RestaurantTable.fromMap(Map<String, dynamic> map){
     return RestaurantTable(
       id: map['id'],
-      tableNo: map['table_no'],
-      chairCount: map['chair_count'],
+      tableNo: map['tableNo'],
+      chairCount: map['chairCount'],
     );
   }
 
@@ -21,8 +21,8 @@ class RestaurantTable {
   {
     return {
       'id' : id,
-      'table_no' : tableNo,
-      'chair_count' : chairCount,
+      'tableNo' : tableNo,
+      'chairCount' : chairCount,
     };
   }
 }
