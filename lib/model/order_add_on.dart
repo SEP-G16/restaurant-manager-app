@@ -1,19 +1,16 @@
 class OrderAddOn {
   int id;
-  String name;
-  double price;
+  int addOnId;
   int quantity;
   OrderAddOn({
     required this.id,
-    required this.name,
-    required this.price,
+    required this.addOnId,
     required this.quantity,
   });
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'name': name,
-      'price': price,
+      'addOnId' : addOnId,
       'quantity': quantity,
     };
   }
@@ -21,22 +18,19 @@ class OrderAddOn {
   factory OrderAddOn.fromMap(Map<String, dynamic> map) {
     return OrderAddOn(
       id: map['id'],
-      name: map['name'],
-      price: map['price'],
+      addOnId: map['addOnId'],
       quantity: map['quantity'],
     );
   }
 
   OrderAddOn copyWith({
     int? id,
-    String? name,
-    double? price,
+    int? addOnId,
     int? quantity,
   }) {
     return OrderAddOn(
       id: id ?? this.id,
-      name: name ?? this.name,
-      price: price ?? this.price,
+      addOnId: addOnId ?? this.addOnId,
       quantity: quantity ?? this.quantity,
     );
   }
