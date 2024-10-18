@@ -69,7 +69,7 @@ class AddReservationTabViewController extends GetxController {
   }
 
   void _onTablesChanged(_) {
-    _displayedTables.value = _rsdc.availableTables;
+    reInit();
   }
 
   Future<void> addReservation(
@@ -93,6 +93,12 @@ class AddReservationTabViewController extends GetxController {
         tableList: _selectedTables,
       ),
     );
+
+    DateTime now = DateTime.now();
+    Map<String, int> timeSlotMap = _dropDownController.getTimeSlotAsIntegerMap(now);
+    await _rsdc.fetchAvailableTables(date: now, timeSlotStart: timeSlotMap['start']!, timeSlotEnd: timeSlotMap['end']!);
+    _dropDownController.setSelectedTimeSlotByDateTime(dateTime: now);
+    _dateController.selectedDate = now;
   }
 
   @override
