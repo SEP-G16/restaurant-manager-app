@@ -47,7 +47,7 @@ class OrderItemTile extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      orderItem.menuItemName,
+                      orderItem.menuItem.name,
                       style: TextConstants.subTextStyle(
                           fontWeight: FontWeight.w700, fontSize: 28),
                     ),
@@ -94,7 +94,7 @@ class OrderItemTile extends StatelessWidget {
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: orderItem.additionalNotes,
+                              text: orderItem.additionalNotes == '' ? 'None' : orderItem.additionalNotes,
                               style: TextConstants.subTextStyle(fontSize: 25),
                             ),
                           ],
@@ -124,7 +124,7 @@ class OrderItemTile extends StatelessWidget {
                 },
                 outlineMode: true,
                 borderWidth: 2,
-                borderColour: ColourConstants.green,
+                borderColour: ColourConstants.green1,
               ),
               SizedBox(
                 height: 15,
@@ -142,7 +142,7 @@ class OrderItemTile extends StatelessWidget {
                 },
                 outlineMode: true,
                 borderWidth: 2,
-                borderColour: ColourConstants.red,
+                borderColour: ColourConstants.red1,
               ),
             ],
           ),
