@@ -26,55 +26,40 @@ class OrderDataController extends GetxController {
   }
 
   Future<void> reInitController() async {
-    _orderList.clear();
-    listenableOrderList.clear();
     await _fetchOrders();
   }
 
   Future<void> _fetchOrders() async {
-    try {
-      List<Map<String, dynamic>> orderList = await _onc.fetchOrders();
-      _orderList =
-          orderList.map((orderMap) => Order.fromMap(orderMap)).toList();
-      listenableOrderList.assignAll(_orderList);
-    } on NetworkException catch (e) {
-      // MessageDialogBox(message: 'A network error occurred!', btnOnPressed: () => Get.back());
-      print(e.toString());
-    } on FormatException catch (e) {
-      // MessageDialogBox(message: 'Unable to format data!', btnOnPressed: () => Get.back());
-      print(e.toString());
-    } on Exception catch (e) {
-      // MessageDialogBox(message: 'An unexpected error occurred!', btnOnPressed: () => Get.back());
-      print(e.toString());
-    }
+    List<Map<String, dynamic>> orderList = await _onc.getAllOrders();
+    _orderList = orderList.map((orderMap) => Order.fromMap(orderMap)).toList();
+    listenableOrderList.assignAll(_orderList);
   }
 
-  void updateOrderStatus() {
-    //update order status
-  }
-
-  Future<void> acceptPendingOrderItem(int orderId, int orderItemId) async {
-    //Do a network call to update the order item status
+  Future<void> _updateOrderItemStatus(int orderId, int orderItemId, OrderItemStatus status) async {
+    Map<String, dynamic> updatedOrderMap = await _onc.updateOrderItemStatus(
+      orderId: orderId,
+      orderItemId: orderItemId,
+      orderItemStatus: status,
+    );
 
     List<OrderItem> originalItemList = orderList
         .where((order) => order.id == orderId)
         .toList()
         .first
         .orderItems;
+
     List<OrderItem> updatedItemList = originalItemList.map((orderItem) {
       if (orderItem.id == orderItemId) {
-        return orderItem.copyWith(status: OrderItemStatus.Processing);
+        return orderItem.copyWith(status: status);
       }
       return orderItem;
     }).toList();
-
-
 
     List<Order> updatedOrderList = orderList.map((order) {
       if (order.id == orderId) {
         return order.copyWith(
           orderItems: updatedItemList,
-          status: OrderStatus.Processing,
+          status: OrderStatus.fromString(updatedOrderMap['status']),
         );
       }
       return order;
@@ -83,65 +68,44 @@ class OrderDataController extends GetxController {
     listenableOrderList.assignAll(_orderList);
   }
 
+  Future<void> acceptPendingOrderItem(int orderId, int orderItemId) async {
+    await _updateOrderItemStatus(orderId, orderItemId, OrderItemStatus.Processing);
+  }
+
   Future<void> rejectPendingOrderItem(int orderId, int orderItemId) async {
-    //Do a network call to reject pending order item
-
-    List<OrderItem> originalItemList = orderList
-        .where((order) => order.id == orderId)
-        .toList()
-        .first
-        .orderItems;
-    List<OrderItem> updatedItemList = originalItemList
-        .where((orderItem) => orderItem.id != orderItemId)
-        .toList();
-
-    if(updatedItemList.isNotEmpty)
-      {
-        List<Order> updatedOrderList = orderList.map((order) {
-          if (order.id == orderId) {
-            return order.copyWith(orderItems: updatedItemList);
-          }
-          return order;
-        }).toList();
-        _orderList = updatedOrderList;
-        listenableOrderList.assignAll(_orderList);
-      }
-    else
-      {
-        List<Order> updatedOrderList = orderList.where((order) => order.id != orderId).toList();
-        _orderList = updatedOrderList;
-        listenableOrderList.assignAll(_orderList);
-      }
+    await _updateOrderItemStatus(orderId, orderItemId, OrderItemStatus.Rejected);
   }
 
   Future<void> completeProcessingOrderItem(int orderId, int orderItemId) async {
-    //Do a network call to complete processing order item
+    await _updateOrderItemStatus(orderId, orderItemId, OrderItemStatus.Complete);
+  }
 
-    List<OrderItem> originalItemList = orderList
-        .where((order) => order.id == orderId)
-        .toList()
-        .first
-        .orderItems;
-    List<OrderItem> updatedItemList = originalItemList
-        .where((orderItem) => orderItem.id != orderItemId)
-        .toList();
+  Future<void> completeOrderAsPaid(int orderId) async
+  {
 
-    if(updatedItemList.isNotEmpty)
-    {
-      List<Order> updatedOrderList = orderList.map((order) {
-        if (order.id == orderId) {
-          return order.copyWith(orderItems: updatedItemList);
+    await _onc.completeOrderAsPaid(orderId: orderId);
+
+    Order order = orderList.where((order) => order.id == orderId).toList().first;
+    order.status = OrderStatus.Complete;
+    _orderList = orderList.map((order) {
+      if (order.id == orderId) {
+        return order.copyWith(status: OrderStatus.Complete);
+      }
+      return order;
+    }).toList();
+    listenableOrderList.assignAll(_orderList);
+  }
+
+  Future<void> completeOrdersWithSessionId({required String sessionId}) async {
+    List<Order> orders = orderList.where((order) => order.sessionId == sessionId).toList();
+    for (Order order in orders) {
+      if (order.status == OrderStatus.Pending_Payment) {
+        await completeOrderAsPaid(order.id);
+      }
+      else
+        {
+          throw Exception('Order not yet pending payment'); //never thrown
         }
-        return order;
-      }).toList();
-      _orderList = updatedOrderList;
-      listenableOrderList.assignAll(_orderList);
-    }
-    else
-    {
-      List<Order> updatedOrderList = orderList.where((order) => order.id != orderId).toList();
-      _orderList = updatedOrderList;
-      listenableOrderList.assignAll(_orderList);
     }
   }
 }
