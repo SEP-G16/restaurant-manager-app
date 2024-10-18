@@ -77,7 +77,7 @@ class OrderTile extends StatelessWidget {
                     width: 10,
                   ),
                   Text(
-                    'Table ${order.tableNo}',
+                    'Table ${order.table.tableNo}',
                     style: TextConstants.mainTextStyle(fontSize: 30),
                   ),
                 ],
