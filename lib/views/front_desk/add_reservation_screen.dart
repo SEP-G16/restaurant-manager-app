@@ -93,7 +93,7 @@ class AddReservationScreen extends StatelessWidget {
                                   child: NamedInputField(
                                     titleText: 'Last Name',
                                     onChanged: (value) {
-                                      stateCont.firstName = value;
+                                      stateCont.lastName = value;
                                     },
                                     width: double.maxFinite,
                                   ),
@@ -210,16 +210,18 @@ class AddReservationScreen extends StatelessWidget {
                             LoadingDialog(
                               callerFunction: () async {
                                 await stateCont.addReservation();
+                                Get.back();
                               },
                               onErrorCallBack: (error) {
                                 MessageDialogBox(
                                     message: error.toString(),
                                     btnOnPressed: () {
                                       Get.back();
+                                      Get.back();
                                     });
                               },
                             );
-                            Get.back();
+                            // Get.back();
                           }
                           //TODO: validate form
                         },
