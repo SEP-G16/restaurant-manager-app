@@ -1,4 +1,5 @@
 import 'package:restaurant_manager/exception/null_map_key_exception.dart';
+import 'package:restaurant_manager/extension/date_time_extension.dart';
 import 'package:restaurant_manager/model/restaurant_table.dart';
 
 class Reservation {
@@ -33,13 +34,13 @@ class Reservation {
     try {
       return Reservation(
         id: map['id'],
-        customerName: map['customer_name'],
-        reservedDate: DateTime.parse(map['reserved_date']),
-        peopleCount: map['people_count'],
-        phoneNo: map['phone_no'],
-        timeSlotStart: map['time_slot_start'],
-        timeSlotEnd: map['time_slot_end'],
-        tableList: (map['table_list'] as List<Map<String, dynamic>>)
+        customerName: map['customerName'],
+        reservedDate: DateTime.parse(map['reservedDate']),
+        peopleCount: map['peopleCount'],
+        phoneNo: map['phoneNo'],
+        timeSlotStart: map['timeSlotStart'],
+        timeSlotEnd: map['timeSlotEnd'],
+        tableList: (map['restaurantTableList'] as List<dynamic>).map((decoded) => decoded as Map<String, dynamic>)
             .map((tableMap) => RestaurantTable.fromMap(tableMap))
             .toList(),
       );
@@ -52,13 +53,13 @@ class Reservation {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'customer_name': customerName,
-      'reserved_date': reservedDate.toIso8601String(),
-      'people_count': peopleCount,
-      'phone_no': phoneNo,
-      'time_slot_start': timeSlotStart,
-      'time_slot_end': timeSlotEnd,
-      'table_list': tableList.map((table) => table.toMap()).toList(),
+      'customerName': customerName,
+      'reservedDate': reservedDate.toIsoFormattedDateTime(),
+      'peopleCount': peopleCount,
+      'phoneNo': phoneNo,
+      'timeSlotStart': timeSlotStart,
+      'timeSlotEnd': timeSlotEnd,
+      'restaurantTableList': tableList.map((table) => table.toMap()).toList(),
     };
   }
 
