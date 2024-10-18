@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:restaurant_manager/controller/data/reservation_screen/view_reservations_tab_view_data_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
 
 import '../../../../model/form_valid_response.dart';
@@ -86,5 +87,17 @@ class AddReservationScreenStateController extends GetxController {
 
   Future<void> addReservation() async {
     await AddReservationTabViewController.instance.addReservation(firstName!, lastName, phoneNo!, email, timeSlot, peopleCount);
+    ViewReservationsTabViewDataController.instance.handleDateChange(selectedDate: DateTime.now());
+  }
+
+  void resetController()
+  {
+    _firstName = '';
+    _lastName = '';
+    _phoneNo = '';
+    _email = '';
+    _peopleCount = 0;
+    _selectedDate = DateTime.now();
+    _timeSlot = '08:00 - 10:00';
   }
 }
