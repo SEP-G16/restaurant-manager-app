@@ -5,15 +5,31 @@ import '../constants/colour_constants.dart';
 import '../constants/text_constants.dart';
 
 class TableTile extends StatelessWidget {
-  const TableTile({
+  TableTile({
     required this.table,
-    required this.checkValue,
-    required this.onCheckBoxPressed,
-  });
+    this.checkValue,
+    this.onCheckBoxPressed,
+    this.selectMode = false,
+    this.onDeletePressed,
+    this.onEditPressed,
+    this.onQRPressed
+  }) {
+    if (selectMode) {
+      assert(checkValue != null && onCheckBoxPressed != null, 'All values must be provided if in select mode');
+    }
+    else
+      {
+        assert(onDeletePressed != null && onEditPressed != null && onQRPressed != null, 'All functions must be provided if not in select mode');
+      }
+  }
 
+  bool selectMode;
   final RestaurantTable table;
-  final bool checkValue;
-  final void Function(bool? value) onCheckBoxPressed;
+  bool? checkValue;
+  void Function(bool? value)? onCheckBoxPressed;
+  void Function()? onEditPressed;
+  void Function()? onDeletePressed;
+  void Function()? onQRPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +74,65 @@ class TableTile extends StatelessWidget {
             ],
           ),
           Spacer(),
-          Checkbox(value: checkValue, onChanged: onCheckBoxPressed),
+          Visibility(
+            visible: selectMode,
+            child: Checkbox(
+              value: selectMode ? checkValue : false,
+              onChanged: onCheckBoxPressed,
+            ),
+          ),
+          Visibility(
+            visible: !selectMode,
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: onEditPressed,
+                  child: Container(
+                    padding: EdgeInsets.all(5),
+                    margin: EdgeInsets.all(2.5),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.green, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: onDeletePressed,
+                  child: Container(
+                    padding: EdgeInsets.all(5),
+                    margin: EdgeInsets.all(2.5),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.red, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: onQRPressed,
+                  child: Container(
+                    padding: EdgeInsets.all(5),
+                    margin: EdgeInsets.all(2.5),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: ColourConstants.chineseBlack, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Icon(
+                      Icons.qr_code,
+                      color: ColourConstants.chineseBlack,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

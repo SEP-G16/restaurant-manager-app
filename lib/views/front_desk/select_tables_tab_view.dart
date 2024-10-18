@@ -435,6 +435,7 @@ class SelectTablesTabView extends StatelessWidget {
                                 .instance.displayedTables
                                 .map((table) {
                               return TableTile(
+                                selectMode: true,
                                 table: table,
                                 //passing controller check value
                                 checkValue: AddReservationTabViewController
@@ -475,6 +476,7 @@ class SelectTablesTabView extends StatelessWidget {
                                   );
 
                                   final stateCont = AddReservationScreenStateController.instance;
+                                  stateCont.resetController();
                                   stateCont.selectedDate = AddReservationTabViewDateController.instance.selectedDate;
                                   stateCont.timeSlot = AddReservationTabViewDropDownController.instance.selectedTimeSlot;
                                   Get.to(() => AddReservationScreen());
