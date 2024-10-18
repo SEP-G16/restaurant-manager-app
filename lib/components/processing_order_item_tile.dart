@@ -45,7 +45,7 @@ class ProcessingOrderItemTile extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      orderItem.menuItemName,
+                      orderItem.menuItem.name,
                       style: TextConstants.subTextStyle(
                           fontWeight: FontWeight.w700, fontSize: 28),
                     ),
@@ -122,7 +122,7 @@ class ProcessingOrderItemTile extends StatelessWidget {
                 },
                 outlineMode: true,
                 borderWidth: 2,
-                borderColour: ColourConstants.green,
+                borderColour: ColourConstants.green1,
               ),
             ],
           ),
