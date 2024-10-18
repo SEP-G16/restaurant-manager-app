@@ -11,7 +11,7 @@ class TextConstants {
         fontSize: fontSize ?? 30.0,
         color: color ?? ColourConstants.chineseBlack,
         fontWeight: fontWeight ?? FontWeight.w600,
-        fontFamily: 'Altone Trial');
+        fontFamily: 'Roundelay');
   }
 
   static subTextStyle({double? fontSize, FontWeight? fontWeight, Color? color}){
@@ -19,7 +19,7 @@ class TextConstants {
         fontSize: fontSize ?? 20.0,
         color: color ?? ColourConstants.chineseBlack,
         fontWeight: fontWeight ?? FontWeight.w500,
-        fontFamily: 'Altone Trial'
+        fontFamily: 'Roundelay'
     );
   }
 
