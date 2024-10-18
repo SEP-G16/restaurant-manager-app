@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
+import 'package:restaurant_manager/controller/data/reservation_screen/reservation_data_controller_mixin.dart';
 import 'package:restaurant_manager/controller/network/reservation_network_controller.dart';
 import 'package:restaurant_manager/exception/network_exception.dart';
 import 'package:restaurant_manager/exception/null_map_key_exception.dart';
 import 'package:restaurant_manager/model/reservation.dart';
 
-class ViewReservationsTabViewDataController extends GetxController {
+class ViewReservationsTabViewDataController extends GetxController with ReservationDataControllerMixin {
   static final ViewReservationsTabViewDataController instance = Get.find();
 
   ViewReservationsTabViewDataController._();
@@ -12,9 +13,9 @@ class ViewReservationsTabViewDataController extends GetxController {
   final ReservationNetworkController _rnc =
       ReservationNetworkController.instance;
 
-  RxList<Reservation> _allReservationsByDate = <Reservation>[].obs;
+  List<Reservation> _allReservationsByDate = <Reservation>[];
   List<Reservation> get allReservationsByDate => _allReservationsByDate;
-  RxList<Reservation> get listenableAllReservationsByDate => _allReservationsByDate;
+  RxList<Reservation> listenableAllReservationsByDate  = <Reservation>[].obs;
 
   static Future<ViewReservationsTabViewDataController> create() async {
     final controller = ViewReservationsTabViewDataController._();
@@ -24,8 +25,8 @@ class ViewReservationsTabViewDataController extends GetxController {
 
   Future<void> _init() async {
     try {
-      _allReservationsByDate.value = await _handleDateChange(DateTime.now());
-      print(_allReservationsByDate);
+      _allReservationsByDate = await _handleDateChange(DateTime.now());
+      listenableAllReservationsByDate.assignAll(_allReservationsByDate);
     }on FormatException catch(e){
       print('Format Exception caught');
     } on NetworkException catch (e) {
@@ -38,21 +39,15 @@ class ViewReservationsTabViewDataController extends GetxController {
   }
 
   Future<List<Reservation>> _handleDateChange(DateTime selectedDate) async {
-    Map<String, dynamic> dataMap =
+    List<Map<String, dynamic>> reservationMapList =
         await _rnc.fetchReservationsByDate(selectedDate);
-    print(dataMap);
-    if (dataMap['reservations'] == null) {
-      throw NullMapKeyException(message: 'NULL Key \'reservations\'');
-    }
-
-    return (dataMap['reservations'] as List<Map<String, dynamic>>)
-        .map((reservationMap) => Reservation.fromMap(reservationMap))
-        .toList();
+    return reservationMapList.map((map) => Reservation.fromMap(map)).toList();
   }
 
   Future<void> handleDateChange({required DateTime selectedDate}) async {
     try {
-      _allReservationsByDate.value = await _handleDateChange(selectedDate);
+      _allReservationsByDate= await _handleDateChange(selectedDate);
+      listenableAllReservationsByDate.assignAll(_allReservationsByDate);
     } on NetworkException catch (e) {
       print('Error fetching reservations');
       //show dialog
@@ -61,4 +56,6 @@ class ViewReservationsTabViewDataController extends GetxController {
       //show appropriate dialog
     }
   }
+
+
 }
