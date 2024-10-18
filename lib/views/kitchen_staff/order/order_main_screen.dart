@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager/controller/views/orders_screen/orders_screen_tab_controller.dart';
-import 'package:restaurant_manager/views/exclude_custom_drawer.dart';
+import 'package:restaurant_manager/components/custom_drawer.dart';
 import 'package:restaurant_manager/views/kitchen_staff/order/pending_orders_tab_view.dart';
 import 'package:restaurant_manager/views/kitchen_staff/order/processing_orders_tab_view.dart';
 
