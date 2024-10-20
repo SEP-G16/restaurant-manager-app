@@ -12,6 +12,7 @@ class NamedInputField extends StatelessWidget {
     this.readOnly = false,
     this.initialValue,
     this.keyboardType,
+    this.obscureText = false,
   });
 
   final String titleText;
@@ -22,6 +23,7 @@ class NamedInputField extends StatelessWidget {
   String? initialValue;
   bool readOnly;
   TextInputType? keyboardType;
+  bool obscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class NamedInputField extends StatelessWidget {
             width: width,
             initialValue: initialValue,
             readOnly: readOnly,
+            obscureText: obscureText,
           ),
         ],
       ),
