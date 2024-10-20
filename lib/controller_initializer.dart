@@ -7,6 +7,7 @@ import 'package:restaurant_manager/controller/network/inventory_network_controll
 import 'package:restaurant_manager/controller/network/reservation_network_controller.dart';
 import 'package:restaurant_manager/controller/network/table_data_network_controller.dart';
 import 'package:restaurant_manager/controller/network/web-socket-controller.dart';
+import 'package:restaurant_manager/controller/views/drawer_state_controller.dart';
 import 'package:restaurant_manager/controller/views/orders_screen/order_screen_main_state_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/add_reservation_tab_view/add_reservation_tab_view_date_controller.dart';
@@ -46,6 +47,7 @@ class ControllerInitializer{
       Get.put(TableDataNetworkController());
       await Get.putAsync(() => TableDataController.create());
 
+      Get.put(DrawerStateController());
 
       // _initialized = true;
     }catch(e){
