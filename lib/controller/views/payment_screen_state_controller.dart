@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:restaurant_manager/controller/data/order_screen/order_data_controller.dart';
+import 'package:restaurant_manager/enum/order_item_status.dart';
 import 'package:restaurant_manager/enum/order_status.dart';
 import 'package:restaurant_manager/model/payment_pending_session.dart';
 
@@ -25,8 +26,23 @@ class PaymentScreenStateController extends GetxController {
       sessionOrdersMap[order.sessionId]!.add(order);
     }
 
+    bool orderValidator(MapEntry<String, List<Order>> entry){
+      List<Order> orderList = entry.value;
+
+      bool allCancelled = orderList.every((order) => order.status == OrderStatus.Cancelled);
+      bool anyPending = orderList.any((order) => order.status == OrderStatus.Pending);
+      bool anyProcessing = orderList.any((order) => order.status == OrderStatus.Processing);
+      bool anyComplete = orderList.any((order) => order.status == OrderStatus.Complete);
+
+      if(anyPending || anyProcessing || allCancelled || anyComplete)
+        {
+          return false;
+        }
+      return true;
+    }
+
     return sessionOrdersMap.entries
-        .where((entry) => entry.value.every((order) => order.status == OrderStatus.Pending_Payment))
+        .where(orderValidator)
         .map((entry) => PaymentPendingSession(sessionId: entry.key, orderList: entry.value))
         .toList();
   }
@@ -44,7 +60,7 @@ class PaymentScreenStateController extends GetxController {
     // TODO: implement onReady
     super.onReady();
 
-    ever(_odc.listenableOrderList, (orderList){
+    debounce(_odc.listenableOrderList, (orderList){
       _sessions.assignAll(_generateList(orderList));
     });
   }
