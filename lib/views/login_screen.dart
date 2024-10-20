@@ -34,6 +34,7 @@ class LoginScreen extends StatelessWidget {
           SizedBox(height: 20.0),
           InputField(
             labelText: 'Password',
+            obscureText: true,
             onChanged: (value) {
               password = value;
             },
