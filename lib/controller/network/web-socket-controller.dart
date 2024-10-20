@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:restaurant_manager/controller/data/auth_controller.dart';
 import 'package:restaurant_manager/controller/data/order_screen/order_data_controller.dart';
+import 'package:restaurant_manager/controller/views/web_socket_dialog_controller.dart';
 import 'package:restaurant_manager/controller/views/welcome_screen_controller.dart';
+import 'package:restaurant_manager/enum/role.dart';
 import 'package:socket_io_client/socket_io_client.dart' as SIO;
 import 'package:restaurant_manager/constants/network_constants.dart';
 
@@ -33,14 +36,28 @@ class WebSocketController extends GetxController {
       _socket.connect();
 
       _socket.on('readHelpRequest', (data) {
-        print('Executed');
-        WelcomeScreenController welcomeScreenController =
-            WelcomeScreenController.instance;
-        welcomeScreenController.onHelpRequest(data: data);
+        if (AuthController.instance.hasRole([
+          Role.ROLE_ADMIN,
+          Role.ROLE_FRONT_DESK,
+          Role.ROLE_RESTAURANT_MANAGER
+        ])) {
+          WelcomeScreenController welcomeScreenController =
+              WelcomeScreenController.instance;
+          welcomeScreenController.onHelpRequest(data: data);
+        }
       });
 
       _socket.on('readOrderAdded', (data) {
-        OrderDataController.instance.reInitController();
+        if(AuthController.instance.hasRole([Role.ROLE_ADMIN, Role.ROLE_CHEF])){
+          OrderDataController.instance.reInitController();
+        }
+      });
+
+      _socket.on('readReadyToPay', (data) {
+        print('Showed');
+        if(AuthController.instance.hasRole([Role.ROLE_ADMIN, Role.ROLE_RESTAURANT_MANAGER, Role.ROLE_FRONT_DESK])){
+          WebSocketDialogController.showReadyToPayDialog(jsonDecode(data));
+        }
       });
     } catch (e) {
       print('Error establishing websocket connection.');
@@ -48,8 +65,7 @@ class WebSocketController extends GetxController {
     }
   }
 
-  void sendWSRequest(
-      {required String message, Map<String, dynamic>? data}) {
+  void sendWSRequest({required String message, Map<String, dynamic>? data}) {
     try {
       _socket.emit(
         message,
