@@ -8,6 +8,8 @@ import 'package:restaurant_manager/controller/views/view_inventory_screen/invent
 import 'package:restaurant_manager/enum/menu_item_status.dart';
 import 'package:restaurant_manager/components/custom_drawer.dart';
 
+import '../../controller/views/drawer_state_controller.dart';
+
 
 class InventoryManagementScreen extends StatelessWidget {
   final InventoryScreenStateController inventoryController =
@@ -15,6 +17,12 @@ class InventoryManagementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      DrawerStateController.instance.selectedIndex = DrawerStateController.INVENTORY_TILE_INDEX;
+    });
+
+
     return Scaffold(
       drawer: CustomDrawer(),
       body: Padding(

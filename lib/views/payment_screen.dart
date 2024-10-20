@@ -4,11 +4,14 @@ import 'package:restaurant_manager/components/complete_order_item_tile.dart';
 import 'package:restaurant_manager/components/order_item_tile.dart';
 import 'package:restaurant_manager/constants/text_constants.dart';
 import 'package:restaurant_manager/components/custom_drawer.dart';
+import 'package:restaurant_manager/enum/order_item_status.dart';
+import 'package:restaurant_manager/enum/order_status.dart';
 
 import '../constants/colour_constants.dart';
 
 import 'package:get/get.dart';
 
+import '../controller/views/drawer_state_controller.dart';
 import '../controller/views/payment_screen_state_controller.dart';
 
 class PaymentScreen extends StatelessWidget {
@@ -17,6 +20,10 @@ class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(PaymentScreenStateController());
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      DrawerStateController.instance.selectedIndex = DrawerStateController.PAYMENT_TILE_INDEX;
+    });
 
     return Scaffold(
       drawer: CustomDrawer(),

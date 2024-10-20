@@ -7,12 +7,19 @@ import 'package:restaurant_manager/views/kitchen_staff/order/processing_orders_t
 
 import '../../../constants/colour_constants.dart';
 import '../../../constants/text_constants.dart';
+import '../../../controller/views/drawer_state_controller.dart';
 
 class OrderMainScreen extends StatelessWidget {
   const OrderMainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      DrawerStateController.instance.selectedIndex = DrawerStateController.ORDER_TILE_INDEX;
+    });
+
+
     return GetBuilder<OrdersScreenTabController>(
       init: OrdersScreenTabController(),
       builder: (controller) {

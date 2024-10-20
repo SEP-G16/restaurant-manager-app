@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:restaurant_manager/constants/colour_constants.dart';
+import 'package:restaurant_manager/controller/views/drawer_state_controller.dart';
 import 'package:restaurant_manager/controller/views/reservation_screen/reservation_screen_tab_controller.dart';
 import 'package:restaurant_manager/components/custom_drawer.dart';
 import 'package:restaurant_manager/views/front_desk/select_tables_tab_view.dart';
@@ -10,6 +11,11 @@ import '../../constants/text_constants.dart';
 class ReservationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      DrawerStateController.instance.selectedIndex = DrawerStateController.RESERVATION_TILE_INDEX;
+    });
+
     return GetBuilder<ReservationScreenTabController>(
       init: ReservationScreenTabController(),
       builder: (controller) {

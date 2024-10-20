@@ -9,12 +9,19 @@ import 'package:restaurant_manager/constants/text_constants.dart';
 import 'package:restaurant_manager/controller/views/table_screen/table_screen_state_controller.dart';
 import 'package:restaurant_manager/components/custom_drawer.dart';
 
+import '../controller/views/drawer_state_controller.dart';
+
 class TableManagementScreen extends StatelessWidget {
   const TableManagementScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     Get.put(TableScreenStateController());
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      DrawerStateController.instance.selectedIndex = DrawerStateController.TABLE_TILE_INDEX;
+    });
+
 
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
