@@ -14,7 +14,7 @@ enum OrderStatus{
       case 'Pending_Payment':
         return OrderStatus.Pending_Payment;
       default:
-        return OrderStatus.Pending;
+        throw Exception('Unknown order status');
     }
   }
 }
