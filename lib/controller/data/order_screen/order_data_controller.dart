@@ -98,14 +98,27 @@ class OrderDataController extends GetxController {
 
   Future<void> completeOrdersWithSessionId({required String sessionId}) async {
     List<Order> orders = orderList.where((order) => order.sessionId == sessionId).toList();
+
+    bool allCancelled = orders.every((order) => order.status == OrderStatus.Cancelled);
+    bool anyPending = orders.any((order) => order.status == OrderStatus.Pending);
+    bool anyProcessing = orders.any((order) => order.status == OrderStatus.Processing);
+    bool anyComplete = orders.any((order) => order.status == OrderStatus.Complete);
+
+    if(anyPending || anyProcessing)
+      {
+        throw Exception('Cannot complete session with pending or processing orders');
+      }
+
+    if(anyComplete)
+      {
+        throw Exception('Cannot complete session with complete orders');
+      }
+
     for (Order order in orders) {
       if (order.status == OrderStatus.Pending_Payment) {
         await completeOrderAsPaid(order.id);
       }
-      else
-        {
-          throw Exception('Order not yet pending payment'); //never thrown
-        }
+
     }
   }
 }
