@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:restaurant_manager/controller/data/order_screen/order_data_controller.dart';
 import 'package:restaurant_manager/controller/network/inventory_network_controller.dart';
 
 import '../../../enum/menu_item_status.dart';
@@ -44,5 +45,6 @@ class InventoryDataController extends GetxController {
     item.status = status;
     _inventoryList = originalItemList;
     listenableInventoryList.assignAll(originalItemList);
+    OrderDataController.instance.reInitController();
   }
 }
