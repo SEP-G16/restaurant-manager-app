@@ -122,79 +122,82 @@ class PaymentScreen extends StatelessWidget {
                                           Column(
                                             children:
                                                 session.orderList.map((order) {
-                                              return Column(
-                                                children: [
-                                                  Container(
-                                                    padding:
-                                                        EdgeInsets.all(10.0),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 5),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Colors.grey
-                                                              .withOpacity(0.5),
-                                                          spreadRadius: 1,
-                                                          blurRadius: 7,
-                                                          offset: Offset(0,
-                                                              3), // changes position of shadow
-                                                        ),
-                                                      ],
+                                              return Visibility(
+                                                visible: order.status == OrderStatus.Pending_Payment,
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.all(10.0),
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 5),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                8.0),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.grey
+                                                                .withOpacity(0.5),
+                                                            spreadRadius: 1,
+                                                            blurRadius: 7,
+                                                            offset: Offset(0,
+                                                                3), // changes position of shadow
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            'Order #${order.id}',
+                                                            style: TextConstants
+                                                                .mainTextStyle(
+                                                                    fontSize: 24),
+                                                          ),
+                                                          Divider(),
+                                                          Column(
+                                                            children:
+                                                                order.orderItems.where((oi) => oi.status == OrderItemStatus.Complete).toList()
+                                                                    .map(
+                                                                      (orderItem) =>
+                                                                          CompleteOrderItemTile(orderItem: orderItem),
+                                                                    )
+                                                                    .toList(),
+                                                          ),
+                                                          // Divider(),
+                                                          // Padding(
+                                                          //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                                                          //   child: Row(
+                                                          //     mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                                                          //     children: [
+                                                          //       Row(
+                                                          //         children: [
+                                                          //           Icon(Icons.money),
+                                                          //           SizedBox(width: 15,),
+                                                          //           Text('Order Total', style: TextConstants.mainTextStyle(fontSize: 22),),
+                                                          //         ],
+                                                          //       ),
+                                                          //       Text(
+                                                          //         '\$. ${order.totalAmount.toStringAsFixed(2)}',
+                                                          //         style: TextConstants
+                                                          //             .mainTextStyle(fontSize: 22),
+                                                          //       ),
+                                                          //     ],
+                                                          //   ),
+                                                          // ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          'Order #${order.id}',
-                                                          style: TextConstants
-                                                              .mainTextStyle(
-                                                                  fontSize: 24),
-                                                        ),
-                                                        Divider(),
-                                                        Column(
-                                                          children:
-                                                              order.orderItems
-                                                                  .map(
-                                                                    (orderItem) =>
-                                                                        CompleteOrderItemTile(orderItem: orderItem),
-                                                                  )
-                                                                  .toList(),
-                                                        ),
-                                                        // Divider(),
-                                                        // Padding(
-                                                        //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                        //   child: Row(
-                                                        //     mainAxisAlignment : MainAxisAlignment.spaceBetween,
-                                                        //     children: [
-                                                        //       Row(
-                                                        //         children: [
-                                                        //           Icon(Icons.money),
-                                                        //           SizedBox(width: 15,),
-                                                        //           Text('Order Total', style: TextConstants.mainTextStyle(fontSize: 22),),
-                                                        //         ],
-                                                        //       ),
-                                                        //       Text(
-                                                        //         '\$. ${order.totalAmount.toStringAsFixed(2)}',
-                                                        //         style: TextConstants
-                                                        //             .mainTextStyle(fontSize: 22),
-                                                        //       ),
-                                                        //     ],
-                                                        //   ),
-                                                        // ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               );
                                             }).toList(),
                                           ),
