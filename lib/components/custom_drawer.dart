@@ -96,36 +96,37 @@ class CustomDrawer extends StatelessWidget {
                   Role.ROLE_FRONT_DESK,
                   Role.ROLE_RESTAURANT_MANAGER
                 ]),
-                child: Builder(
-                  builder: (context) {
-                    return Obx(() {
-                      bool isSelected =
-                          DrawerStateController.instance.selectedIndex == 0;
-                      return DrawerTile(
-                        title: 'Reservations',
-                        icon: Icons.bookmark_outline_outlined,
-                        colour: isSelected
-                            ? ColourConstants.gamboge
-                            : Colors.grey.shade100,
-                        textColour: isSelected
-                            ? ColourConstants.white
-                            : ColourConstants.chineseBlack,
-                        onPressed: () {
-                          DrawerStateController.instance.selectedIndex = 0;
-                          Scaffold.of(context).closeDrawer();
-                          Get.to(() => ReservationScreen());
-                        },
-                      );
-                    });
-                  }
-                ),
+                child: Builder(builder: (context) {
+                  return Obx(() {
+                    bool isSelected =
+                        DrawerStateController.instance.selectedIndex ==
+                            DrawerStateController.RESERVATION_TILE_INDEX;
+                    return DrawerTile(
+                      title: 'Reservations',
+                      icon: Icons.bookmark_outline_outlined,
+                      colour: isSelected
+                          ? ColourConstants.gamboge
+                          : Colors.grey.shade100,
+                      textColour: isSelected
+                          ? ColourConstants.white
+                          : ColourConstants.chineseBlack,
+                      onPressed: () {
+                        DrawerStateController.instance.selectedIndex =
+                            DrawerStateController.RESERVATION_TILE_INDEX;
+                        Scaffold.of(context).closeDrawer();
+                        Get.to(() => ReservationScreen());
+                      },
+                    );
+                  });
+                }),
               ),
-
               Visibility(
-                visible: AuthController.instance.hasRole([Role.ROLE_ADMIN, Role.ROLE_CHEF]),
+                visible: AuthController.instance
+                    .hasRole([Role.ROLE_ADMIN, Role.ROLE_CHEF]),
                 child: Obx(() {
                   bool isSelected =
-                      DrawerStateController.instance.selectedIndex == 1;
+                      DrawerStateController.instance.selectedIndex ==
+                          DrawerStateController.ORDER_TILE_INDEX;
                   return DrawerTile(
                     icon: Icons.fastfood_outlined,
                     title: 'Orders',
@@ -136,7 +137,8 @@ class CustomDrawer extends StatelessWidget {
                         ? ColourConstants.white
                         : ColourConstants.chineseBlack,
                     onPressed: () {
-                      DrawerStateController.instance.selectedIndex = 1;
+                      DrawerStateController.instance.selectedIndex =
+                          DrawerStateController.ORDER_TILE_INDEX;
                       Scaffold.of(context).closeDrawer();
                       Get.to(() => OrderMainScreen());
                     },
@@ -151,7 +153,8 @@ class CustomDrawer extends StatelessWidget {
                 ]),
                 child: Obx(() {
                   bool isSelected =
-                      DrawerStateController.instance.selectedIndex == 2;
+                      DrawerStateController.instance.selectedIndex ==
+                          DrawerStateController.INVENTORY_TILE_INDEX;
                   return DrawerTile(
                     icon: Icons.inventory_2_outlined,
                     title: 'Inventory',
@@ -162,13 +165,13 @@ class CustomDrawer extends StatelessWidget {
                         ? ColourConstants.white
                         : ColourConstants.chineseBlack,
                     onPressed: () {
-                      DrawerStateController.instance.selectedIndex = 2;
+                      DrawerStateController.instance.selectedIndex =
+                          DrawerStateController.INVENTORY_TILE_INDEX;
                       Get.to(() => InventoryManagementScreen());
                     },
                   );
                 }),
               ),
-
               Visibility(
                 visible: AuthController.instance.hasRole([
                   Role.ROLE_ADMIN,
@@ -177,7 +180,8 @@ class CustomDrawer extends StatelessWidget {
                 ]),
                 child: Obx(() {
                   bool isSelected =
-                      DrawerStateController.instance.selectedIndex == 3;
+                      DrawerStateController.instance.selectedIndex ==
+                          DrawerStateController.TABLE_TILE_INDEX;
                   return DrawerTile(
                     icon: Icons.table_restaurant_outlined,
                     title: 'Tables',
@@ -188,13 +192,13 @@ class CustomDrawer extends StatelessWidget {
                         ? ColourConstants.white
                         : ColourConstants.chineseBlack,
                     onPressed: () {
-                      DrawerStateController.instance.selectedIndex = 3;
+                      DrawerStateController.instance.selectedIndex =
+                          DrawerStateController.TABLE_TILE_INDEX;
                       Get.to(() => TableManagementScreen());
                     },
                   );
                 }),
               ),
-
               Visibility(
                 visible: AuthController.instance.hasRole([
                   Role.ROLE_ADMIN,
@@ -203,7 +207,8 @@ class CustomDrawer extends StatelessWidget {
                 ]),
                 child: Obx(() {
                   bool isSelected =
-                      DrawerStateController.instance.selectedIndex == 5;
+                      DrawerStateController.instance.selectedIndex ==
+                          DrawerStateController.PAYMENT_TILE_INDEX;
                   return DrawerTile(
                     icon: Icons.payments_outlined,
                     title: 'Payment',
@@ -214,7 +219,8 @@ class CustomDrawer extends StatelessWidget {
                         ? ColourConstants.white
                         : ColourConstants.chineseBlack,
                     onPressed: () {
-                      DrawerStateController.instance.selectedIndex = 5;
+                      DrawerStateController.instance.selectedIndex =
+                          DrawerStateController.PAYMENT_TILE_INDEX;
                       Get.to(() => PaymentScreen());
                     },
                   );
@@ -222,10 +228,11 @@ class CustomDrawer extends StatelessWidget {
               ),
               Spacer(),
               ActionButton(
-                  btnText: 'Logout',
-                  onTap: () async {
-                    await AuthController.instance.logout();
-                  }),
+                btnText: 'Logout',
+                onTap: () async {
+                  await AuthController.instance.logout();
+                },
+              ),
             ],
           ),
         );
