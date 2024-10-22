@@ -16,6 +16,14 @@ mixin ReservationDataControllerMixin {
   ];
   List<String> get timeSlots => _timeSlots;
 
+  bool isTimeSlotBeforeCurrentHour(String timeSlot) {
+    final now = DateTime.now();
+    final currentHour = now.hour;
+
+    final startHour = int.parse(timeSlot.substring(0, 2));
+
+    return startHour < currentHour;
+  }
 
   ReservationNetworkController reservationNetworkController = ReservationNetworkController.instance;
   Future<void> addReservation({required Reservation reservation}) async {

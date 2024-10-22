@@ -32,7 +32,7 @@ class InventoryNetworkController extends GetxController {
     }
   }
 
-  Future<Map<String, dynamic>> updateStockAvailabilityStatus(
+  Future<Map<String, dynamic>> updateStockStatus(
       {required int itemId, required MenuItemStatus status}) async {
     if (_authController.token == null) {
       _authController.logout();
@@ -41,7 +41,7 @@ class InventoryNetworkController extends GetxController {
 
     try {
       var response = await http.put(
-        Uri.parse('${NetworkConstants.baseUrl}/api/menu/update'),
+        Uri.parse('${NetworkConstants.baseUrl}/api/menu/update-status'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${_authController.token}'

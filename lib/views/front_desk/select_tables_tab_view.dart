@@ -469,6 +469,18 @@ class SelectTablesTabView extends StatelessWidget {
                               child: ActionButton(
                                 btnText: 'Add Reservation',
                                 onTap: () async {
+
+                                  if(AddReservationTabViewDropDownController.instance.isTimeSlotBeforeCurrentHour(AddReservationTabViewDropDownController.instance.selectedTimeSlot))
+                                    {
+                                      MessageDialogBox(
+                                        message: 'Please select a valid time slot',
+                                        btnOnPressed: () {
+                                          Get.back();
+                                        },
+                                      );
+                                      return;
+                                    }
+
                                   await Future.delayed(
                                     Duration(
                                       milliseconds: 300,

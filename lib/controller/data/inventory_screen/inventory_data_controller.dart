@@ -40,6 +40,7 @@ class InventoryDataController extends GetxController {
 
   Future<void> updateStockStatus({required int itemId, required MenuItemStatus status}) async {
     //network call
+    await _inc.updateStockStatus(itemId: itemId, status: status);
     List<InventoryItem> originalItemList = _inventoryList;
     InventoryItem item = originalItemList.firstWhere((item) => item.id == itemId);
     item.status = status;

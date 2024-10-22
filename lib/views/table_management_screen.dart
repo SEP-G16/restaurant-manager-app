@@ -104,6 +104,13 @@ class TableManagementScreen extends StatelessWidget {
                                   snackPosition: SnackPosition.BOTTOM);
                               return;
                             }
+
+                            if(TableScreenStateController.instance.tableList.any((table) => table.tableNo == tableNo)){
+                              Get.snackbar('Error', 'Table number already exists',
+                                  snackPosition: SnackPosition.BOTTOM);
+                              return;
+                            }
+
                             await TableScreenStateController.instance.addTable(
                                 tableNo: tableNo!, chairCount: chairCount!);
                             // Add table to database
